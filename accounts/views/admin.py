@@ -3,12 +3,14 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.utils.text import slugify
 
 from django_tables2 import SingleTableView
+from django_tables2.paginators import LazyPaginator
 
 from accounts.models import LocalUser, Staff
 from accounts.tables import StaffTable
-from services.forms import CategoryCreationForm
+from services.forms import CategoryCreationForm, ServiceCreationForm
 from services.models import Category
 
 
@@ -16,11 +18,8 @@ class StaffListView(SingleTableView):
     model = Staff
     table_class = StaffTable
     template_name = "admin/admin-dashboard.html"
-
-    def form_valid(self, form):
-        # email = form.instance.email
-        form.instance.username = self.request.user_email.split("@")[0]
-        return super().form_valid(form)
+    # table_data = Staff.objects.all()
+    # paginator_class = LazyPaginator
 
 
 # def dashboard_admin(request):
@@ -47,14 +46,20 @@ def staff_activate(request, staff_id):
     return redirect('accounts:staff_table')
 
 
-class CategoryFormView(SuccessMessageMixin, CreateView):
+class CategoryCreateView(SuccessMessageMixin, CreateView):
     template_name = 'admin/create-category.html'
     form_class = CategoryCreationForm
     success_url = reverse_lazy('accounts:add_category')
     success_message = "A new category has been added"
 
-    # def form_valid(self, form):
-    # This method is called when valid form data has been POSTed.
-    # It should return an HttpResponse.
+    def form_valid(self, form):
+        form.instance.slug = slugify(form.instance.name)
 
-    # return super().form_valid(form)
+        return super().form_valid(form)
+
+
+class ServiceCreateView(SuccessMessageMixin, CreateView):
+    template_name = 'admin/create-service.html'
+    form_class = ServiceCreationForm
+    success_url = reverse_lazy('accounts:add_service')
+    success_message = "A new service has been added"
