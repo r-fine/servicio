@@ -1,0 +1,104 @@
+{% extends "../base.html" %}
+{% load static %}
+<!-- {% load crispy_forms_tags %} -->
+{% block title %}Home{% endblock%}
+{% block content %}
+{% block head %}
+{% endblock head %}
+
+<header class="bg-info py-5">
+    <div class="container px-4 px-lg-5 my-3">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Company Name</h1>
+            <p class="lead fw-normal text-dark-50 mb-0">company slogan</p>
+            {% if user.is_superuser %}
+            <a class="btn btn-lg btn-secondary mt-3" href="/super-admin">Admin Panel</a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        {% if messages %}
+        <div class="d-flex-center">
+            <div class="text-center">
+                <div class="alert alert-success" role="alert">
+
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="d-sm-none accordion" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                        aria-controls="panelsStayOpen-collapseOne">
+                        Categories
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                    aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        {% load mptt_tags %}
+                        <ul>
+                            {% recursetree categories %}
+                            <li>
+                                {{ node.name }}
+                                {% if not node.is_leaf_node %}
+                                <ul class="children">
+                                    {{ children }}
+                                </ul>
+                                {% endif %}
+                            </li>
+                            {% endrecursetree %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mb-4">
+            <div class="row justify-content-start">
+                <div class="col-9 col-sm-4">
+                    <span class="text-primary fs-4 fs-sm-3 fw-bold">All Services</span>
+                    <hr class="d-sm-none">
+                </div>
+            </div>
+        </div>
+
+        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for c in subcategories %}
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <!-- Product image-->
+                    <img class="card-img-top" alt="Responsive image" src="{{ c.image.url }}" />
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-dark text-decoration-none">
+                            <!-- Product name-->
+                            <a href="{{ c.get_absolute_url }}" class="text-dark text-decoration-none">
+                                <h5 class="fw-bolder">{{ c.name }}</h5>
+                            </a>
+                            <hr>
+                            <!-- Product price-->
+                            <div class="d-flex justify-content-center align-items-end">
+                                <small class="text-primary fw-bolder fs-6 text-align-center">View Details</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+</section>
+
+{% endblock content %}
