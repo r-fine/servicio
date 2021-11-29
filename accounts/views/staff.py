@@ -42,7 +42,7 @@ def dashboard_staff(request):
     if staff.is_active:
         return HttpResponse('Staff Dashboard')
     else:
-        return redirect('accounts:staff_edit', staff.id)
+        return redirect('accounts:staff_form', staff.id)
 
 
 # def register_staff(request):
