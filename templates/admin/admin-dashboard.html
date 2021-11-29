@@ -1,5 +1,4 @@
 {% extends "../base.html" %}
-{% load static %}
 {% load crispy_forms_tags %}
 {% load render_table from django_tables2 %}
 {% block title %}List of staffs{% endblock%}
@@ -12,34 +11,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function ($) {
-        $("td:contains('edit')").click(function () {
-            window.location = $(this).data("href");
+        $("td:contains('edit'), td:contains('delete'), td:contains('True'), td:contains('False')").click(
+            function () {
+                window.location = $(this).data("href");
+            }).css({
+            'text-decoration': 'underline',
+            "color": "navy",
         });
-        $("td:contains('delete')").click(function () {
-            window.location = $(this).data("href");
-        });
-        $("td:contains('False')").click(function () {
-            window.location = $(this).data("href");
-        });
-        $("td:contains('True')").click(function () {
-            window.location = $(this).data("href");
-        });
-    });
-    $("td:contains('edit')").css({
-        'color': '#ff5900',
-        'text-decoration': 'underline'
-    });
-    $("td:contains('delete')").css({
-        "color": "red",
-        "text-decoration": "underline"
-    });
-    $("td:contains('False')").css({
-        "color": "navy",
-        "text-decoration": "underline"
-    });
-    $("td:contains('True')").css({
-        "color": "green",
-        "text-decoration": "underline"
     });
 </script>
 {% endblock %}
