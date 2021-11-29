@@ -3,7 +3,8 @@ from .views.admin import (
     StaffListView,
     staff_activate,
     staff_delete,
-    CategoryFormView
+    CategoryCreateView,
+    ServiceCreateView,
 )
 from .views.staff import (
     RegisterStaffView,
@@ -46,6 +47,10 @@ urlpatterns = [
     ),
     path(
         'admin/add-category/',
-        CategoryFormView.as_view(), name='add_category'
+        CategoryCreateView.as_view(), name='add_category'
+    ),
+    path(
+        'admin/add-service/',
+        ServiceCreateView.as_view(), name='add_service'
     )
 ]
