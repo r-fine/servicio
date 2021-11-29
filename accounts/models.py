@@ -7,6 +7,9 @@ from services.models import Category
 
 class LocalUser(AbstractUser):
     username = models.CharField(max_length=30, unique=False)
+    email = models.EmailField(verbose_name='E-mail Address', unique=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     @property
     def get_full_name(self):
