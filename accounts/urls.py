@@ -1,4 +1,5 @@
 from django.urls import path
+from .views.auth import RegisterStaffView
 from .views.admin import (
     StaffListView,
     staff_activate,
@@ -7,7 +8,6 @@ from .views.admin import (
     ServiceCreateView,
 )
 from .views.staff import (
-    RegisterStaffView,
     dashboard_staff,
     staff_form,
 )
