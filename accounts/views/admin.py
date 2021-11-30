@@ -1,19 +1,23 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic.edit import CreateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.text import slugify
 
 from django_tables2 import SingleTableView
-from django_tables2.paginators import LazyPaginator
 
 from accounts.models import LocalUser, Staff
 from accounts.tables import StaffTable
+from accounts.decorators import admin_required, admin_only
 from services.forms import CategoryCreationForm, ServiceCreationForm
-from services.models import Category
 
 
+# class AdminRequiredMixin(UserPassesTestMixin):
+#     def test_func(self):
+#         return self.request.user.is_superuser
+
+@admin_required()
 class StaffListView(SingleTableView):
     model = Staff
     table_class = StaffTable
@@ -26,7 +30,7 @@ class StaffListView(SingleTableView):
 
 #     return HttpResponse('Dashboard Admin')
 
-
+@admin_only
 def staff_delete(request, staff_id):
     staff = Staff.objects.get(pk=staff_id)
     user = LocalUser.objects.get(pk=staff.user_id)
@@ -35,6 +39,7 @@ def staff_delete(request, staff_id):
     return redirect('accounts:staff_table')
 
 
+@admin_only
 def staff_activate(request, staff_id):
     staff = Staff.objects.get(pk=staff_id)
     if staff.is_active:
@@ -46,6 +51,7 @@ def staff_activate(request, staff_id):
     return redirect('accounts:staff_table')
 
 
+@admin_required()
 class CategoryCreateView(SuccessMessageMixin, CreateView):
     template_name = 'admin/create-category.html'
     form_class = CategoryCreationForm
@@ -58,6 +64,7 @@ class CategoryCreateView(SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
 
+@admin_required()
 class ServiceCreateView(SuccessMessageMixin, CreateView):
     template_name = 'admin/create-service.html'
     form_class = ServiceCreationForm

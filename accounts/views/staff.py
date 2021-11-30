@@ -1,21 +1,13 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from django.views.generic import CreateView
-from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
 
 
-from accounts.models import LocalUser, Staff
-from accounts.forms import RegisterStaffForm, StaffEditForm
+from accounts.models import Staff
+from accounts.forms import StaffEditForm
+from accounts.decorators import staff_only
 
 
-class RegisterStaffView(SuccessMessageMixin, CreateView):
-    template_name = 'staff/register-staff.html'
-    form_class = RegisterStaffForm
-    success_url = reverse_lazy('account_login')
-    success_message = "Profile Created"
-
-
+@staff_only
 def staff_form(request, staff_id):
     staff = Staff.objects.get(pk=staff_id)
 
@@ -37,6 +29,7 @@ def staff_form(request, staff_id):
         return render(request, 'staff/staff-form.html', context)
 
 
+@staff_only
 def dashboard_staff(request):
     staff = Staff.objects.get(user=request.user)
     if staff.is_active:
