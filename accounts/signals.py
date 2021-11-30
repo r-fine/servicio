@@ -9,7 +9,7 @@ from .models import Staff
 @receiver(user_logged_in)
 def staff_profile(request, user, **kwargs):
     if user.is_superuser == False and user.is_staff:
-        if Staff.DoesNotExist:
+        if not Staff.objects.filter(user=user).exists():
             group = Group.objects.get(name='STAFF')
             group.user_set.add(user)
             Staff.objects.create(user=user)
