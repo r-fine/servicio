@@ -13,7 +13,10 @@ class LocalUser(AbstractUser):
 
     @property
     def get_full_name(self):
+        verbose_name = 'Full Name'
         return self.first_name + " " + self.last_name
+
+    get_full_name.fget.short_description = 'Full Name'
 
     def __str__(self):
         if self.is_superuser:
@@ -34,7 +37,7 @@ class Staff(models.Model):
         upload_to='images/profile_pic/',
     )
     phone = models.CharField(verbose_name='Phone Number', max_length=11)
-    address = models.CharField(max_length=255)
+    address = models.TextField(max_length=255, blank=False)
     is_active = models.BooleanField(
         verbose_name='Active status', default=False
     )

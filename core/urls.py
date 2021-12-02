@@ -6,15 +6,15 @@ from django.views.static import serve
 
 import debug_toolbar
 
-from services import views
+from services.views import HomeView
 
 urlpatterns = [
     path('super-admin/', admin.site.urls),
-    path('', views.home),
+    path('', HomeView.as_view()),
     path('auth/', include('allauth.urls')),
     path('account/', include('accounts.urls', namespace='accounts')),
     path('service/', include('services.urls', namespace='services')),
-    # path('order/', include('orders.urls', namespace='orders')),
+    path('orders/', include('orders.urls', namespace='orders')),
     path('__debug__/', include(debug_toolbar.urls)),
     # path(r'^media/(?P<path>.*)$', serve,
     #      {'document_root': settings.MEDIA_ROOT}),

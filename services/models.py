@@ -35,7 +35,7 @@ class Category(MPTTModel):
 
     def get_absolute_url(self):
         return reverse(
-            'services:category_details',
+            'services:category_detail',
             args=[self.slug]
         )
 
@@ -73,10 +73,11 @@ class Service(models.Model):
 
 
 class ReviewRating(models.Model):
-    service = models.ForeignKey(
-        Service,
-        related_name='review_service',
-        on_delete=models.CASCADE
+    category = models.ForeignKey(
+        Category,
+        related_name='review_category',
+        on_delete=models.CASCADE,
+        null=True
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

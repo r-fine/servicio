@@ -10,25 +10,12 @@
     action="{% url 'accounts:register_staff' %}">
     {% csrf_token %}
     <!-- {{ form|crispy }} -->
-    <div class="form-row">
-        <div class="form-group">{{ form.email|as_crispy_field }}</div>
-    </div>
-    <div class="form-row">
-        <div class="form-group">{{ form.first_name|as_crispy_field }}</div>
-    </div>
-    <div class="form-row">
-        <div class="form-group">{{ form.last_name|as_crispy_field }}</div>
-    </div>
-    <div class="form-row">
-        <div class="form-group">{{ form.password1|as_crispy_field }}</div>
-    </div>
-    <div class="form-row">
-        <div class="form-group">{{ form.password2|as_crispy_field }}</div>
-    </div>
-    <div class="form-group">
-        {% render_field form.is_staff required="required" class="checkboxinput" %}
-        <label for="">Confirm register as Staff</label>
-    </div>
+    {{ form.email|as_crispy_field }}
+    {{ form.first_name|as_crispy_field }}
+    {{ form.last_name|as_crispy_field }}
+    {{ form.password1|as_crispy_field }}
+    {{ form.password2|as_crispy_field }}
+    {{ form.is_staff|as_crispy_field }}
     {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}

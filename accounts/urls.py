@@ -16,7 +16,8 @@ app_name = 'accounts'
 urlpatterns = [
     path(
         "admin-dashboard/",
-        StaffListView.as_view(), name='staff_table'),
+        StaffListView.as_view(), name='staff_table'
+    ),
     # path(
     #     'register-staff/',
     #      staff.register_staff, name='register_staff'

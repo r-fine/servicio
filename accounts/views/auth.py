@@ -11,7 +11,6 @@ from accounts.decorators import unauthenticated_user
 
 @unauthenticated_user()
 class RegisterStaffView(SuccessMessageMixin, CreateView):
-    login_url = 'auth/logout'
     template_name = 'staff/register-staff.html'
     form_class = RegisterStaffForm
     success_url = reverse_lazy('account_login')
