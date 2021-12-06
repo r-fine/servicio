@@ -1,6 +1,6 @@
 # How to install:
 ### 1. Install [Python](https://www.python.org/downloads/) on your computer
-### 2. [Download](https://github.com/r-fine/servisio.git) or clone the repository 
+### 2. [Download](https://github.com/r-fine/servicio.git) or clone the repository 
 ```
 git clone https://github.com/r-fine/servisio.git
 ```
