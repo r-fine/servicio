@@ -1,0 +1,114 @@
+{% extends "../base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Order History{% endblock%}
+{% block content %}
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags != 'error' %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% else %}
+        <div class="alert alert-danger">{{ message }}</div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        <h3>Active Orders:</h3>
+        {% for o in active %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Order Number</th>
+                    <th scope="col">Delivery Date</th>
+                    <th scope="col">Delivery Time</th>
+                    <th scope="col">Area</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ o.order_number }}</td>
+                    <td>{{ o.date }}</td>
+                    <td>{{ o.time }}</td>
+                    <td>{{ o.area }}</td>
+                    <td>{{ o.get_status_display }}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{% url 'accounts:cancel_order' o.id %}" type="button"
+                                class="btn btn-sm btn-warning"
+                                onclick="return confirm('Are you sure you want to cancel this order?')">
+                                cancel
+                            </a>
+                            <a href="#" type="button" class="btn btn-sm btn-outline-secondary">Details</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% empty %}
+        <div class="alert alert-warning">No active orders</div>
+        {% endfor %}
+
+        <h3>Completed Orders:</h3>
+        {% for o in completed %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Order Number</th>
+                    <th scope="col">Delivery Date</th>
+                    <th scope="col">Delivery Time</th>
+                    <th scope="col">Area</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ o.order_number }}</td>
+                    <td>{{ o.date }}</td>
+                    <td>{{ o.time }}</td>
+                    <td>{{ o.area }}</td>
+                    <td>{{ o.get_status_display }}</td>
+                    <td>
+                        <a href="#" type="button" class="btn btn-sm btn-outline-secondary">Details</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% empty %}
+        <div class="alert alert-warning">No completed orders</div>
+        {% endfor %}
+
+        <h3>Cancelled Orders:</h3>
+        {% for o in cancelled %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Order Number</th>
+                    <th scope="col">Delivery Date</th>
+                    <th scope="col">Delivery Time</th>
+                    <th scope="col">Area</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ o.order_number }}</td>
+                    <td>{{ o.date }}</td>
+                    <td>{{ o.time }}</td>
+                    <td>{{ o.area }}</td>
+                    <td>{{ o.get_status_display }}</td>
+                    <td>
+                        <a href="#" type="button" class="btn btn-sm btn-outline-secondary">Details</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% empty %}
+        <div class="alert alert-warning">No cancelled orders</div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
