@@ -1,24 +1,51 @@
 {% extends "../base.html" %}
 {% load crispy_forms_tags %}
-{% block title %}Add - Category{% endblock%}
+{% block title %}Place Order{% endblock%}
 {% block content %}
-<section class="mt-5 pt-5 mb-5 pb-5" style="min-height:84vh">
-    <div class="card mx-auto mt-5 pt-5" style="max-width: 425px; margin-top:100px;">
-        <div class="card-body">
-            {% if messages %}
-            <div class="alert alert-warning">
-                <ul>{% for message in messages %}<li>{{message}}</li>{% endfor %}</ul>
+<div class="row ms-5 ps-5 mb-5 pb-5 me-5 pe-5">
+    <div class="col-6">
+        <div class="card ms-5 me-3 mt-5">
+            <div class="card-body mx-5 mb-2">
+
+                <h1 class="text-center text-danger fw-bolder">{{ user }}</h1>
+                <h1 class="text-center">Place Order</h1>
+                <form method='POST'>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="row justify-content-xs-center mt-3">
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                    </div>
+                </form>
             </div>
-            {% endif %}
-            <h1 class="text-center">Place Order</h1>
-            <form method='POST'>
-                {% csrf_token %}
-                {{ form|crispy }}
-                <div class="row justify-content-xs-center mt-3">
-                    <button type="submit" class="btn btn-secondary">Submit</button>
-                </div>
-            </form>
         </div>
     </div>
-</section>
+    <div class="col-6">
+        <div class="card ms-5 me-5 mt-5 pt-5">
+            <div class="card-body">
+                <h2>Order List</h2>
+                {% if messages %}
+                {% for message in messages %}
+                {% if message.tags != 'error' %}
+                <div class="alert alert-{{ message.tags }}">{{ message|safe }}</div>
+                {% else %}
+                <div class="alert alert-danger">{{ message|safe }}</div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                <ul>
+                    {% for item in order_items %}
+                    <li>
+                        {{ item.service.name }} <a type="button" class="btn btn-sm btn-danger"
+                            href="{% url 'orders:remove_item' item.service.id item.id %}">Remove</a>
+                    </li>
+                    {% empty %}
+                    <div class="alert alert-danger me-5">
+                        Your order list is empty!
+                    </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

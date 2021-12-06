@@ -15,7 +15,10 @@
     {{ form.last_name|as_crispy_field }}
     {{ form.password1|as_crispy_field }}
     {{ form.password2|as_crispy_field }}
-    {{ form.is_staff|as_crispy_field }}
+    <div class="form-group">
+        {% render_field form.is_staff required="required" class="checkboxinput" %}
+        <label for="">Confirm register as Staff</label>
+    </div>
     {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}

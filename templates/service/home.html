@@ -15,9 +15,10 @@
             {% endif %}
         </div>
     </div>
+    <span id="home"></span>
 </header>
 
-<section class="py-5" id="jumpPagination">
+<section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
         {% if messages %}
         <div class="d-flex-center">
@@ -71,8 +72,7 @@
             {% if page_obj.has_other_pages %}
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link"
-                        href="?page={{page_obj.previous_page_number}}#jumpPagination">&laquo;
+                <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}#home">&laquo;
                         Previous</a>
                 </li>
                 {% else %}
@@ -83,13 +83,13 @@
                 {% if page_obj.number == i %}
                 <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
                 {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{i}}#jumpPagination">{{i}}</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{i}}#home">{{i}}</a></li>
                 {% endif %}
                 {% endfor %}
 
                 {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link"
-                        href="?page={{page_obj.next_page_number}}#jumpPagination">Next &raquo;</a>
+                <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}#home">Next
+                        &raquo;</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>

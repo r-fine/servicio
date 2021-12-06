@@ -1,6 +1,7 @@
 {% extends "../base.html" %}
 {% load static %}
-{% block title %}All Category{% endblock%}
+<!-- {% load crispy_forms_tags %} -->
+{% block title %}{{ category.name }}{% endblock%}
 {% block content %}
 <div class="container mt-5 pt-5 mb-5 pb-5">
     <dvi class="row">
@@ -31,7 +32,7 @@
                                 Notes: <br>
                                 <span class="text-muted">{{ s.notes }}</span>
                             </p>
-                            <a href="#" class="btn btn-outline-secondary">Book</a>
+                            <a href="{% url "orders:add_order" s.id %}" class="btn btn-outline-secondary">Book</a>
                         </div>
                     </div>
                 </div>
@@ -39,5 +40,23 @@
             </div>
         </div>
     </dvi>
+    <div class="container mt-5">
+        <form method="POST">
+            {% if messages %}
+            <div class="alert alert-success">
+                {% for message in messages %}{{ message }}{% endfor %}
+            </div>
+            {% endif %}
+            {% csrf_token %}
+            {{ form|crispy }}
+            {% if ordered %}
+            <button class="btn btn-secondary mt-3" type="submit">Submit Review</button>
+            {% else %}
+            <button class="btn btn-secondary mt-3" type="submit" disabled>Submit Review</button>
+            <br>
+            <span class="text-muted">You need purchase this order first to review</span>
+            {% endif %}
+        </form>
+    </div>
 </div>
 {% endblock %}

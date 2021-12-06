@@ -12,11 +12,11 @@
         <div class="card-body">
             {% block allauth_extra %}
             {% if messages %}
-            <div class="alert alert-warning">
+            <div class="alert alert-success">
                 <ul>
                     {% for message in messages %}
-                    <li>{{message}}</li>
-                    {% endfor %}
+                    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                        {% endfor %}
                 </ul>
             </div>
             {% endif %}
