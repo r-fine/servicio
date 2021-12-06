@@ -2,7 +2,7 @@
 ### 1. Install [Python](https://www.python.org/downloads/) on your computer
 ### 2. [Download](https://github.com/r-fine/servicio.git) or clone the repository 
 ```
-git clone https://github.com/r-fine/servisio.git
+git clone https://github.com/r-fine/servicio.git
 ```
 ### 3. Open project folder on vscode
 ### 4. Open terminal
