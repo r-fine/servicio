@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 
 from allauth.account.decorators import verified_email_required
 
-from orders.models import Order, OrderItem
+from apps.orders.models import Order, OrderItem
 
 
 def user_dashboard(request):

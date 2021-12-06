@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from allauth.account.decorators import verified_email_required
 
-from services.models import Service
+from apps.services.models import Service
 from .models import Order, OrderItem
 from .forms import OrderForm
 

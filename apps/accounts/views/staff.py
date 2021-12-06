@@ -2,9 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 
-from accounts.models import Staff
-from accounts.forms import StaffEditForm
-from accounts.decorators import staff_only
+from apps.accounts.models import Staff
+from apps.accounts.forms import StaffEditForm
+from apps.accounts.decorators import staff_only
 
 
 @staff_only

@@ -5,8 +5,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 
 
-from accounts.forms import RegisterStaffForm
-from accounts.decorators import unauthenticated_user
+from apps.accounts.forms import RegisterStaffForm
+from apps.accounts.decorators import unauthenticated_user
 
 
 @unauthenticated_user()

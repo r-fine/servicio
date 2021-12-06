@@ -7,10 +7,10 @@ from django.utils.text import slugify
 
 from django_tables2 import SingleTableView
 
-from accounts.models import LocalUser, Staff
-from accounts.tables import StaffTable
-from accounts.decorators import admin_required, admin_only
-from services.forms import CategoryCreationForm, ServiceCreationForm
+from apps.accounts.models import LocalUser, Staff
+from apps.accounts.tables import StaffTable
+from apps.accounts.decorators import admin_required, admin_only
+from apps.services.forms import CategoryCreationForm, ServiceCreationForm
 
 
 # class AdminRequiredMixin(UserPassesTestMixin):

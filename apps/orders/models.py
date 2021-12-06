@@ -1,8 +1,8 @@
 from django.db import models
 from django.conf import settings
 
-from services.models import Service
-from accounts.models import Staff
+from apps.services.models import Service
+from apps.accounts.models import Staff
 
 from allauth.account.models import EmailAddress
 

@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
 from .forms import ReviewRatingForm
 
-from orders.models import OrderItem
+from apps.orders.models import OrderItem
 
 
 class HomeView(ListView):

@@ -30,9 +30,9 @@ INSTALLED_APPS = [
     'mptt',
     'allauth',
     'allauth.account',
-    'accounts.apps.AccountsConfig',
-    'services',
-    'orders',
+    'apps.accounts.apps.AccountsConfig',
+    'apps.services',
+    'apps.orders',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +58,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'services.context_processors.categories',
+                'apps.services.context_processors.categories',
             ],
         },
     },
@@ -178,14 +178,14 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # allauth settings
 
-ACCOUNT_SIGNUP_FORM_CLASS = 'accounts.forms.SignupForm'
-ACCOUNT_ADAPTER = 'accounts.adapter.AccountAdapter'
+ACCOUNT_SIGNUP_FORM_CLASS = 'apps.accounts.forms.SignupForm'
+ACCOUNT_ADAPTER = 'apps.accounts.adapter.AccountAdapter'
 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_USER_DISPLAY = 'accounts.utils.user_display'
+ACCOUNT_USER_DISPLAY = 'apps.accounts.utils.user_display'
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'accounts:order_history'

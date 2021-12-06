@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 
-from services.models import Category
+from apps.services.models import Category
 
 
 class LocalUser(AbstractUser):
