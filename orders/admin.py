@@ -5,7 +5,10 @@ from .models import *
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['area', 'order_number', 'created_at', 'updated_at']
+    list_display = ['order_number', 'id', 'area', 'created_at',
+                    'updated_at', 'user_verification_status']
 
 
-admin.site.register(OrderProduct)
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['service', 'user', 'order', 'is_active']

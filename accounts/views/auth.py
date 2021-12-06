@@ -15,3 +15,8 @@ class RegisterStaffView(SuccessMessageMixin, CreateView):
     form_class = RegisterStaffForm
     success_url = reverse_lazy('account_login')
     success_message = "Profile Created"
+
+    def form_valid(self, form):
+        form.instance.username = form.instance.email.split('@')[0]
+
+        return super().form_valid(form)

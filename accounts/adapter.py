@@ -13,5 +13,6 @@ class AccountAdapter(DefaultAccountAdapter):
             url = '/account/staff-dashboard'
         else:
             url = settings.LOGIN_REDIRECT_URL
+            # url = request.META.get('HTTP_REFERER')
 
         return resolve_url(url)

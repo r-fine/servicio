@@ -9,19 +9,11 @@ class LocalUser(AbstractUser):
     username = models.CharField(max_length=30, unique=False)
     email = models.EmailField(verbose_name='E-mail Address', unique=True)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     @property
-    def get_full_name(self):
-        verbose_name = 'Full Name'
-        return self.first_name + " " + self.last_name
-
-    get_full_name.fget.short_description = 'Full Name'
-
-    def __str__(self):
-        if self.is_superuser:
-            return self.username
-        return self.get_full_name
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
 
 
 class Staff(models.Model):

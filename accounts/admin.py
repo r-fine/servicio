@@ -7,7 +7,7 @@ from .models import *
 
 @admin.register(LocalUser)
 class LocalUserAdmin(admin.ModelAdmin):
-    list_display = ['get_full_name', 'email', 'is_staff', 'get_group']
+    list_display = ['full_name', 'email', 'is_staff', 'get_group']
     list_filter = ['is_active', 'is_staff']
     list_per_page = 25
 
@@ -22,7 +22,7 @@ class LocalUserAdmin(admin.ModelAdmin):
 
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
-    list_display = ['department', 'user', 'phone', 'is_active']
+    list_display = ['user', 'department', 'phone', 'is_active']
     list_editable = ['is_active']
     list_filter = ['is_active']
     list_per_page = 25
