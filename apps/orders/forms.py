@@ -11,3 +11,13 @@ class OrderForm(forms.ModelForm):
             'first_name', 'last_name', 'phone', 'email',
             'address_line_1', 'address_line_2', 'area', 'order_note', 'date', 'time',
         ]
+
+
+class AdminOrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = [
+            'user', 'order_number', 'first_name', 'last_name', 'phone', 'email',
+            'address_line_1', 'address_line_2', 'area', 'order_note', 'date', 'time',
+            'status', 'assigned_staff', 'is_ordered',
+        ]
