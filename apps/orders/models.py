@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 from apps.services.models import Service
 from apps.accounts.models import Staff
@@ -9,7 +10,7 @@ from allauth.account.models import EmailAddress
 
 class Order(models.Model):
     STATUS = (
-        ('New', 'New'),
+        ('Pending', 'Pending'),
         ('Accepted', 'Accepted'),
         ('OTW', 'On the way'),
         ('Completed', 'Completed'),
@@ -27,7 +28,8 @@ class Order(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        null=True
+        null=True,
+        blank=True,
     )
     order_number = models.CharField(max_length=20)
     first_name = models.CharField(max_length=50)
@@ -48,8 +50,8 @@ class Order(models.Model):
         auto_now=False,
         auto_now_add=False,
     )
-    status = models.CharField(max_length=10, choices=STATUS, default='New')
-    ordered = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, choices=STATUS, default='Pending')
+    is_ordered = models.BooleanField(default=False)
     assigned_staff = models.ForeignKey(
         Staff, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -70,16 +72,24 @@ class Order(models.Model):
         return EmailAddress.objects.filter(user_id=self.user.id, verified=True).exists()
     user_verification_status.fget.short_description = 'Verified User'
 
+    def edit_url(self):
+        return reverse('accounts:edit_order', args=[self.pk])
+
     def __str__(self):
         return self.order_number
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    ordered = models.BooleanField(default=False)
+    is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)

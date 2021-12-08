@@ -9,7 +9,7 @@ import debug_toolbar
 from apps.services.views import HomeView
 
 urlpatterns = [
-    path('super-admin/', admin.site.urls),
+    path('django-admin/', admin.site.urls),
     path('', HomeView.as_view()),
     path('auth/', include('allauth.urls')),
     path('account/', include('apps.accounts.urls', namespace='accounts')),

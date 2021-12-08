@@ -16,7 +16,7 @@ def user_dashboard(request):
 def order_history(request):
     user = request.user
     active = Order.objects.filter(
-        user=user, status__in=('New', 'Accepted', 'OTW')
+        user=user, status__in=('Pending', 'Accepted', 'OTW')
     )
     completed = Order.objects.filter(user=user, status='Completed')
     cancelled = Order.objects.filter(user=user, status='Cancelled')

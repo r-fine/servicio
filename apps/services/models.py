@@ -8,6 +8,7 @@ class Category(MPTTModel):
     name = models.CharField(
         verbose_name='Category Name',
         max_length=255,
+        unique=True,
         db_index=True,
     )
     slug = models.SlugField(max_length=255, unique=True)
@@ -34,10 +35,13 @@ class Category(MPTTModel):
         verbose_name_plural = 'Categories'
 
     def get_absolute_url(self):
-        return reverse(
-            'services:category_detail',
-            args=[self.slug]
-        )
+        return reverse('services:category_detail', args=[self.slug])
+
+    def edit_url(self):
+        return reverse('accounts:edit_category', args=[self.pk])
+
+    def delete_url(self):
+        return reverse('accounts:delete_category', args=[self.pk])
 
     def averageReview(self):
         reviews = ReviewRating.objects.filter(
@@ -55,6 +59,13 @@ class Category(MPTTModel):
             count = int(reviews['count'])
         return count
 
+    @property
+    def is_parent(self):
+        if self.level == 0:
+            return True
+        else:
+            return None
+
     def __str__(self):
         for i in range(3):
             if self.level == i:
@@ -67,8 +78,9 @@ class Service(models.Model):
     category = models.ForeignKey(
         Category,
         related_name='category',
+        on_delete=models.CASCADE,
         null=True,
-        on_delete=models.SET_NULL,
+        blank=True,
     )
     name = models.CharField(verbose_name='Service Name', max_length=255)
     summary = models.TextField(blank=True)
@@ -86,6 +98,12 @@ class Service(models.Model):
 
     class Meta:
         ordering = ['name']
+
+    def edit_url(self):
+        return reverse('accounts:edit_service', args=[self.pk])
+
+    def delete_url(self):
+        return reverse('accounts:delete_service', args=[self.pk])
 
     def __str__(self):
         return self.name

@@ -20,8 +20,9 @@ class Staff(models.Model):
     department = models.ForeignKey(
         Category,
         related_name='department',
+        on_delete=models.CASCADE,
         null=True,
-        on_delete=models.SET_NULL
+        blank=True,
     )
     user = models.OneToOneField(LocalUser, on_delete=models.CASCADE)
     profile_pic = models.ImageField(
@@ -44,10 +45,10 @@ class Staff(models.Model):
     def get_absolute_url(self):
         return reverse('accounts:staff_form', args=[self.pk])
 
-    def delete_staff(self):
+    def delete_url(self):
         return reverse('accounts:staff_delete', args=[self.pk])
 
-    def activate_user(self):
+    def activation_url(self):
         return reverse('accounts:staff_activate', args=[self.pk])
 
     def __str__(self):

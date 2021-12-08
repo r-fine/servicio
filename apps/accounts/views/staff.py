@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-
+from django.contrib import messages
 
 from apps.accounts.models import Staff
 from apps.accounts.forms import StaffEditForm
@@ -17,6 +17,7 @@ def staff_form(request, staff_id):
             # staff = form.save(commit=False)
             # staff.is_active = True
             staff.save()
+            messages.success(request, 'Saved')
             if request.user.is_superuser:
                 return redirect('accounts:staff_table')
             return redirect('accounts:dashboard_staff')
@@ -26,7 +27,7 @@ def staff_form(request, staff_id):
         form = StaffEditForm(instance=staff)
         context = {'form': form}
 
-        return render(request, 'staff/staff-form.html', context)
+        return render(request, 'account/staff/staff-form.html', context)
 
 
 @staff_only
@@ -59,4 +60,4 @@ def dashboard_staff(request):
 #         staffForm = StaffEditForm()
 #         context = {'userForm': userForm, 'staffForm': staffForm}
 
-#         return render(request, 'staff/register-staff.html', context)
+#         return render(request, 'account/staff/register-staff.html', context)

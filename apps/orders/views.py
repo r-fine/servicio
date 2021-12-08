@@ -38,13 +38,14 @@ class OrderCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         form.instance.order_number = order_number
 
         order_items = OrderItem.objects.filter(
-            user=self.request.user, is_active=True
+            user=self.request.user,
+            is_ordered=False
         )
 
         self.object = form.save()
 
         for item in order_items:
-            item.is_active = False
+            item.is_ordered = True
             item.order = form.instance
             item.save()
 
@@ -53,7 +54,7 @@ class OrderCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['order_items'] = OrderItem.objects.filter(
-            user=self.request.user, is_active=True
+            user=self.request.user, is_ordered=False
         )
 
         return context
@@ -68,7 +69,7 @@ def add_order(request, service_id):
         order_item = OrderItem.objects.get(
             user=request.user,
             service=service,
-            is_active=True
+            is_ordered=False
         )
         messages.warning(request, 'Already added to order list.')
 
@@ -76,7 +77,7 @@ def add_order(request, service_id):
         order_item = OrderItem.objects.create(
             user=request.user,
             service=service,
-            is_active=True
+            is_ordered=False
         )
         order_item.save()
         messages.success(request, 'Added to order list.')
