@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
 from .forms import ReviewRatingForm
 
-from apps.orders.models import OrderItem
+from apps.orders.models import Order, OrderItem
 
 
 class HomeView(ListView):
@@ -38,19 +38,14 @@ class CategoryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context.update({
             'services': Service.objects.filter(category=self.object),
-            'ordered': OrderItem.objects.filter(
-                user=self.request.user,
-                service__in=Service.objects.filter(category=self.object)
-            )
+            'ordered': OrderItem.objects.filter(user=self.request.user, service__in=Service.objects.filter(category=self.object), is_ordered=True, order__in=Order.objects.filter(is_ordered=True))
             if self.request.user.is_authenticated else None,
             'reviews': ReviewRating.objects.filter(
                 category_id=self.object.id,
                 status=True
             ),
-            'is_reviewed': ReviewRating.objects.get(
-                user=self.request.user, category=self.object
-            )
-            if self.request.user.is_authenticated else None,
+            'is_reviewed': ReviewRating.objects.get(user=self.request.user, category=self.object)
+            if (self.request.user.is_authenticated and ReviewRating.objects.filter(category_id=self.object.id, status=True).exists()) else None,
             'form': ReviewRatingForm(),
         })
         return context
@@ -69,6 +64,10 @@ class ReviewRatingFormView(LoginRequiredMixin, SuccessMessageMixin, SingleObject
             return ReviewRatingForm(self.request.POST, instance=reviews)
         except ReviewRating.DoesNotExist:
             return ReviewRatingForm(self.request.POST)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
