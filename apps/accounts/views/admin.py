@@ -56,16 +56,11 @@ def staff_activate(request, staff_id):
     return redirect('accounts:staff_table')
 
 
-# @admin_required()
-class CategoryServiceTableView(MultiTableMixin, TemplateView):
-    template_name = "account/admin/category-service-list.html"
-    tables = [
-        CategoryTable(Category.objects.all()),
-        ServiceTable(Service.objects.all())
-    ]
-    table_pagination = {
-        "per_page": 25
-    }
+@admin_required()
+class CategoryTableView(SingleTableView):
+    model = Category
+    table_class = CategoryTable
+    template_name = "account/admin/category-list.html"
 
 
 @admin_required()
@@ -113,7 +108,14 @@ def delete_category(request, category_id):
     category = Category.objects.get(pk=category_id)
     category.delete()
 
-    return redirect('accounts:product_table')
+    return redirect('accounts:category_table')
+
+
+@admin_required()
+class ServiceTableView(SingleTableView):
+    model = Service
+    table_class = ServiceTable
+    template_name = "account/admin/service-list.html"
 
 
 @admin_required()
@@ -156,7 +158,7 @@ def delete_service(request, service_id):
     service = Service.objects.get(pk=service_id)
     service.delete()
 
-    return redirect('accounts:product_table')
+    return redirect('accounts:service_table')
 
 
 @admin_required()

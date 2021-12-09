@@ -8,9 +8,8 @@ from .views.user import (
 from .views.admin import (
     dashboard_admin,
     StaffTableView, staff_activate, staff_delete,
-    CategoryServiceTableView,
-    CategoryCreateView, edit_category, delete_category,
-    ServiceCreateView, edit_service, delete_service,
+    CategoryTableView, CategoryCreateView, edit_category, delete_category,
+    ServiceTableView, ServiceCreateView, edit_service, delete_service,
     OrderTableView, OrderUpdateForm,
 )
 from .views.staff import (
@@ -43,7 +42,7 @@ urlpatterns = [
         'admin/staff-activate/<int:staff_id>/', staff_activate, name='staff_activate'
     ),
     path(
-        'admin/product-list/', CategoryServiceTableView.as_view(), name='product_table'
+        'admin/category-list/', CategoryTableView.as_view(), name='category_table'
     ),
     path('admin/category-add/', CategoryCreateView.as_view(), name='create_category'),
     path(
@@ -51,6 +50,9 @@ urlpatterns = [
     ),
     path(
         'admin/category-delete/<int:category_id>/', delete_category, name='delete_category'
+    ),
+    path(
+        'admin/service-list/', ServiceTableView.as_view(), name='service_table'
     ),
     path('admin/service-add/', ServiceCreateView.as_view(), name='create_service'),
     path(
