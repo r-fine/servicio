@@ -22,7 +22,7 @@ source /venv/bin/activate
 ```
 For Windows:
 ```
-./Scripts/activate
+venv/Scripts/activate
 ```
 ### 6. Install requirements file
 ```
