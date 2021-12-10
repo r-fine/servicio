@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy, reverse
 from django.views.generic.list import ListView
@@ -27,6 +27,12 @@ class HomeView(ListView):
 class CategoryListView(ListView):
     model = Category
     template_name = "service/category-list.html"
+
+
+def category_list(request, category_slug=None):
+    category = get_object_or_404(Category, slug=category_slug)
+    subcategories = Category.objects.filter(parent=category)
+    return render(request, 'service/category_list.html', {'category': category, 'subcategories': subcategories})
 
 
 class CategoryDetailView(DetailView):

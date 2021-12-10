@@ -58,7 +58,8 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% recursetree categories %}
                             <li class="dropdown-submenu">
-                                <a class="dropdown-item" {% if node.is_root_node %}href="#"
+                                <a class="dropdown-item"
+                                    {% if node.is_root_node %}href="{% url 'services:category_list' node.slug %}"
                                     {% else %}href="{{ node.get_absolute_url }}" {% endif %}>
                                     {{ node.name }}
                                     {% if not node.is_leaf_node %}
