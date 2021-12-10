@@ -25,7 +25,7 @@ class Category(MPTTModel):
     )
     image = models.ImageField(
         upload_to="images/category/",
-        default="images/500_500.png"
+        default="static/500_500.png"
     )
 
     class MPTTMeta:
@@ -87,7 +87,7 @@ class Service(models.Model):
     notes = models.TextField(blank=True)
     image = models.ImageField(
         upload_to="images/services/",
-        default="images/500_500.png",
+        default="static/500_500.png",
     )
     is_active = models.BooleanField(
         verbose_name="Service Visibility",

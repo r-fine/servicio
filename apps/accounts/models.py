@@ -27,7 +27,7 @@ class Staff(models.Model):
     user = models.OneToOneField(LocalUser, on_delete=models.CASCADE)
     profile_pic = models.ImageField(
         verbose_name='Profile Picture',
-        upload_to='images/profile_pic/',
+        upload_to='static/profile_pic/',
     )
     phone = models.CharField(verbose_name='Phone Number', max_length=11)
     address = models.TextField(max_length=255, blank=False)
