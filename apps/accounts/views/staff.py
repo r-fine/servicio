@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import redirect, render
+# from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 
 from apps.accounts.models import Staff
@@ -25,9 +26,16 @@ def staff_form(request, staff_id):
             return HttpResponse('failed to submit')
     else:
         form = StaffEditForm(instance=staff)
-        context = {'form': form}
+        try:
+            activated = Staff.objects.get(user=request.user, is_active=True)
+        except Staff.DoesNotExist:
+            activated = None
+        context = {'form': form, 'activated': activated}
 
-        return render(request, 'account/staff/staff-form.html', context)
+        if request.user.is_superuser or staff.user.id == request.user.id:
+            return render(request, 'account/staff/staff-form.html', context)
+        else:
+            raise Http404()
 
 
 @staff_only
