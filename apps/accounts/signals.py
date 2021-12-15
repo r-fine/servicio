@@ -20,3 +20,10 @@ def group_customer(request, user, **kwargs):
     if user.is_staff == False:
         group = Group.objects.get_or_create(name='CUSTOMER')
         group[0].user_set.add(user)
+
+
+@receiver(user_logged_in)
+def group_admin(request, user, **kwargs):
+    if user.is_superuser:
+        group = Group.objects.get_or_create(name='ADMIN')
+        group[0].user_set.add(user)
