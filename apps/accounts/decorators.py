@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
@@ -50,3 +51,18 @@ def unauthenticated_user():
                 return redirect('account_logout')
         return WrappedClass
     return wrapper
+
+
+def allowed_users(allowed_roles=[]):
+    def decorator(view_func):
+        def wrapper_func(request, *args, **kwargs):
+            group = None
+            if request.user.groups.exists():
+                group = request.user.groups.all()[0].name
+
+            if group in allowed_roles:
+                return view_func(request, *args, **kwargs)
+            else:
+                raise PermissionDenied
+        return wrapper_func
+    return decorator
