@@ -4,16 +4,38 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.safestring import mark_safe
 from django.core.paginator import Paginator
+from django .views.generic.edit import UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
 
 from allauth.account.decorators import verified_email_required
 
 from apps.orders.models import Order, OrderItem
+from apps.accounts.models import LocalUser
+from apps.accounts.forms import LocalUserForm
 # from apps.accounts.decorators import allowed_users
 
 
 def user_dashboard(request):
-    return HttpResponse('User Dashboard')
-    # return render(request, 'account/user-dashboard.html')
+
+    return render(request, 'account/user/user-dashboard.html')
+
+
+class UserUpdateView(SuccessMessageMixin, UpdateView):
+    model = LocalUser
+    form_class = LocalUserForm
+    template_name = "account/user/user-profile-form.html"
+    success_url = reverse_lazy('accounts:user_dashboard')
+    success_message = 'Profile updated successfully'
+
+    def get_queryset(self):
+        qs = super(UserUpdateView, self).get_queryset()
+        return qs.filter(pk=self.request.user.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = LocalUser.objects.get(pk=self.request.user.id)
+        return context
 
 
 @verified_email_required

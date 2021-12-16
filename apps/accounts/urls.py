@@ -2,6 +2,7 @@ from django.urls import path
 from .views.auth import RegisterStaffView
 from .views.user import (
     user_dashboard,
+    UserUpdateView,
     order_history,
     cancel_order,
 )
@@ -23,8 +24,10 @@ app_name = 'accounts'
 urlpatterns = [
 
     ######################### FOR USER #########################
-    path('user/user-dashboard', user_dashboard, name='user_dashboard'),
-    path('user/order-history', order_history, name='order_history'),
+    path('user/account-dashboard/', user_dashboard, name='user_dashboard'),
+    path('user/user-profile/<int:pk>',
+         UserUpdateView.as_view(), name='user_profile'),
+    path('user/order-history/', order_history, name='order_history'),
     path(
         'user/cancel-order/<int:op_id>/', cancel_order, name='cancel_order'
     ),

@@ -115,6 +115,10 @@
                             {% endif %}
                             {% if user.is_authenticated %}
                             <li>
+                                <a href="{% url 'accounts:user_dashboard' %}" class="dropdown-item">Manage Account</a>
+                            </li>
+                            <hr class="dropdown-divider">
+                            <li>
                                 <form class="d-none" id="logOutForm" method="post" action="{% url 'account_logout' %}">
                                     {% csrf_token %}
                                 </form>
