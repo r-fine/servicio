@@ -12,9 +12,15 @@
                 <form method='POST'>
                     {% csrf_token %}
                     {{ form|crispy }}
+                    {% if item_exists %}
                     <div class="row justify-content-xs-center mt-3">
                         <button type="submit" class="btn btn-secondary">Submit</button>
                     </div>
+                    {% else %}
+                    <div class="row justify-content-xs-center mt-3">
+                        <button type="submit" class="btn btn-secondary" disabled>Submit</button>
+                    </div>
+                    {% endif %}
                 </form>
             </div>
         </div>
@@ -35,7 +41,7 @@
                 <ul>
                     {% for item in order_items %}
                     <li>
-                        {{ item.service.name }} <a type="button" class="btn btn-sm btn-danger"
+                        {{ item }} <a type="button" class="btn btn-sm btn-danger"
                             href="{% url 'orders:remove_item' item.service.id item.id %}">Remove</a>
                     </li>
                     {% empty %}
@@ -48,4 +54,15 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#id_area').select2({
+            placeholder: "Select an area",
+            allowClear: true
+        });
+    });
+</script>
 {% endblock %}

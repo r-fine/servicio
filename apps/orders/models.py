@@ -2,20 +2,13 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 
-from apps.services.models import Service
+from apps.services.models import ServiceOption
 from apps.accounts.models import Staff
 
 from allauth.account.models import EmailAddress
 
 
 class Order(models.Model):
-    STATUS = (
-        ('Pending', 'Pending'),
-        ('Accepted', 'Accepted'),
-        ('OTW', 'On the way'),
-        ('Completed', 'Completed'),
-        ('Cancelled', 'Cancelled'),
-    )
     AREA = (
         ('Abdullahpur', 'Abdullahpur'), ('Agargaon', 'Agargaon'), ('Badda', 'Badda'), ('Banani', 'Banani'), ('Banasree', 'Banasree'), ('Baridhara', 'Baridhara'), ('Bashundhara', 'Bashundhara'), ('Bawnia', 'Bawnia'), ('Beraid',
                                                                                                                                                                                                                          'Beraid'), ('Cantonment area', 'Cantonment area'), ('Dakshinkhan', 'Dakshinkhan'), ('Dania', 'Dania'), ('Demra', 'Demra'), ('Dhanmondi', 'Dhanmondi'), ('Farmgate', 'Farmgate'), ('Gabtali', 'Gabtali'), ('Gulshan', 'Gulshan'),
@@ -30,6 +23,10 @@ class Order(models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
+    )
+    order_item = models.ManyToManyField(
+        'OrderItem',
+        related_name='order_item_list'
     )
     order_number = models.CharField(max_length=20)
     first_name = models.CharField(max_length=50)
@@ -49,12 +46,9 @@ class Order(models.Model):
         verbose_name='Delivery Time',
         auto_now=False,
         auto_now_add=False,
+
     )
-    status = models.CharField(max_length=10, choices=STATUS, default='Pending')
     is_ordered = models.BooleanField(default=False)
-    assigned_staff = models.ForeignKey(
-        Staff, on_delete=models.SET_NULL, null=True, blank=True
-    )
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -72,27 +66,40 @@ class Order(models.Model):
         return EmailAddress.objects.filter(user_id=self.user.id, verified=True).exists()
     user_verification_status.fget.short_description = 'Verified User'
 
-    def edit_url(self):
-        return reverse('accounts:edit_order', args=[self.pk])
-
     def __str__(self):
         return self.order_number
 
 
 class OrderItem(models.Model):
+    STATUS = (
+        ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Preparing', 'Preparing'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+    )
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    service = models.ForeignKey(ServiceOption, on_delete=models.CASCADE)
     is_ordered = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, choices=STATUS, default='Pending')
+    assigned_staff = models.ForeignKey(
+        Staff,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
+    is_reviewable = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-order']

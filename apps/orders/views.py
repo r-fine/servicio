@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.db.models import Q
 
 from allauth.account.decorators import verified_email_required
 
-from apps.services.models import Service
+from apps.services.models import ServiceOption
 from .models import Order, OrderItem
 from .forms import OrderForm
 
@@ -43,6 +45,7 @@ class OrderCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         )
 
         self.object = form.save()
+        form.instance.order_item.set(order_items)
 
         for item in order_items:
             item.is_ordered = True
@@ -53,22 +56,23 @@ class OrderCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['order_items'] = OrderItem.objects.filter(
-            user=self.request.user, is_ordered=False
-        )
+        context.update({
+            'order_items': OrderItem.objects.filter(user=self.request.user, is_ordered=False),
+            'item_exists': OrderItem.objects.filter(user=self.request.user, is_ordered=False).exists()
+        })
 
         return context
 
 
 @login_required
-def add_order(request, service_id):
+def add_item(request, service_option_id):
 
-    service = Service.objects.get(id=service_id)
+    service_option = ServiceOption.objects.get(id=service_option_id)
 
     try:
         order_item = OrderItem.objects.get(
             user=request.user,
-            service=service,
+            service=service_option,
             is_ordered=False
         )
         messages.warning(request, 'Already added to order list.')
@@ -76,7 +80,7 @@ def add_order(request, service_id):
     except OrderItem.DoesNotExist:
         order_item = OrderItem.objects.create(
             user=request.user,
-            service=service,
+            service=service_option,
             is_ordered=False
         )
         order_item.save()
@@ -86,11 +90,11 @@ def add_order(request, service_id):
 
 
 @login_required
-def remove_item(request, service_id, order_item_id):
+def remove_item(request, service_option_id, order_item_id):
 
-    service = Service.objects.get(id=service_id)
+    service_option = ServiceOption.objects.get(id=service_option_id)
     order_item = OrderItem.objects.get(
-        service=service,
+        service=service_option,
         user=request.user,
         id=order_item_id
     )
@@ -98,3 +102,19 @@ def remove_item(request, service_id, order_item_id):
     messages.error(request, 'Removed from order')
 
     return redirect('orders:order_create')
+
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'order/order-detail.html'
+    context_object_name = 'order'
+
+    def get_queryset(self):
+        return Order.objects.filter(Q(user=self.request.user) | Q(assigned_staff__user=self.request.user))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'order_items': OrderItem.objects.filter(order=self.object)
+        })
+        return context
