@@ -1,7 +1,7 @@
-from .models import Category
+from .models import Service
 
 
-def categories(request):
+def services(request):
     return {
-        'categories': Category.objects.all()
+        'services': Service.objects.all()
     }

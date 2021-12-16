@@ -1,6 +1,6 @@
 {% extends "../base.html" %}
 {% load static %}
-{% block title %}{{ category.name }}{% endblock%}
+{% block title %}{{ service.name }}{% endblock%}
 {% block content %}
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
@@ -22,7 +22,7 @@
         <div class="container mb-4">
             <div class="row justify-content-start">
                 <div class="col-9 col-sm-4">
-                    <span class="text-primary fs-4 fs-sm-3 fw-bold">All {{ category|title }}s</span>
+                    <span class="text-primary fs-4 fs-sm-3 fw-bold">All {{ service|title }}s</span>
                     <hr class="d-sm-none">
                 </div>
             </div>

@@ -1,19 +1,19 @@
 {% extends "../base.html" %}
 {% load static %}
 <!-- {% load crispy_forms_tags %} -->
-{% block title %}{{ category.name }}{% endblock%}
+{% block title %}{{ service.name }}{% endblock%}
 {% block content %}
 <div class="container mt-5 pt-5 mb-5 pb-5">
     <dvi class="row">
         <div class="col-8">
-            <h1>{{ category.name }}</h1>
-            <p>Description: {{ category.description }}</p>
-            <img alt="Responsive image" src="{{ category.image.url }}" />
+            <h1>{{ service.name }}</h1>
+            <p>Description: {{ service.description }}</p>
+            <img alt="Responsive image" src="{{ service.image.url }}" />
         </div>
         <div class="col-4">
             <h3>Avaibale services</h3>
             <div class="accordion" id="accordionExample">
-                {% for s in services %}
+                {% for s in service_options %}
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading{{s.id}}">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -32,7 +32,7 @@
                                 Notes: <br>
                                 <span class="text-muted">{{ s.notes }}</span>
                             </p>
-                            <a href="{% url "orders:add_order" s.id %}" class="btn btn-outline-secondary">Book</a>
+                            <a href="{% url "orders:add_item" s.id %}" class="btn btn-outline-secondary">Book</a>
                         </div>
                     </div>
                 </div>

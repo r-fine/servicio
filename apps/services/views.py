@@ -17,55 +17,55 @@ from apps.orders.models import Order, OrderItem
 
 
 class HomeView(ListView):
-    model = Category
+    model = Service
     template_name = 'service/home.html'
-    context_object_name = 'subcategories'
+    context_object_name = 'subservices'
     paginate_by = 4
-    queryset = Category.objects.filter(level=1)
+    queryset = Service.objects.filter(level=1)
 
 
-class CategoryListView(ListView):
-    model = Category
-    template_name = "service/category-list.html"
+class ServiceListView(ListView):
+    model = Service
+    template_name = "service/service-list.html"
 
 
-def category_list(request, category_slug=None):
-    category = get_object_or_404(Category, slug=category_slug)
-    subcategories = Category.objects.filter(parent=category)
-    return render(request, 'service/category_list.html', {'category': category, 'subcategories': subcategories})
+def service_list(request, service_slug=None):
+    service = get_object_or_404(Service, slug=service_slug)
+    subservices = Service.objects.filter(parent=service)
+    return render(request, 'service/service_list.html', {'service': service, 'subservices': subservices})
 
 
-class CategoryDetailView(DetailView):
-    model = Category
-    template_name = "service/category-detail.html"
-    context_object_name = 'category'
+class ServiceDetailView(DetailView):
+    model = Service
+    template_name = "service/service-detail.html"
+    context_object_name = 'service'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'services': Service.objects.filter(category=self.object),
-            'ordered': OrderItem.objects.filter(user=self.request.user, service__in=Service.objects.filter(category=self.object), is_ordered=True, order__in=Order.objects.filter(is_ordered=True))
+            'service_options': ServiceOption.objects.filter(service=self.object),
+            'ordered': OrderItem.objects.filter(user=self.request.user, service__in=ServiceOption.objects.filter(service=self.object), is_ordered=True, is_reviewable=True)
             if self.request.user.is_authenticated else None,
             'reviews': ReviewRating.objects.filter(
-                category_id=self.object.id,
+                service_id=self.object.id,
                 status=True
             ),
-            'is_reviewed': ReviewRating.objects.get(user=self.request.user, category=self.object)
-            if (self.request.user.is_authenticated and ReviewRating.objects.filter(category_id=self.object.id, status=True).exists()) else None,
+            'is_reviewed': ReviewRating.objects.get(user=self.request.user, service=self.object)
+            if (self.request.user.is_authenticated and ReviewRating.objects.filter(service_id=self.object.id, status=True).exists()) else None,
             'form': ReviewRatingForm(),
         })
         return context
 
 
 class ReviewRatingFormView(LoginRequiredMixin, SuccessMessageMixin, SingleObjectMixin, FormView):
-    template_name = "service/category-detail.html"
-    model = Category
+    template_name = "service/service-detail.html"
+    model = Service
     success_message = 'Thank you! Your review has been submitted.'
 
     def get_form(self):
         try:
             reviews = ReviewRating.objects.get(
-                user=self.request.user, category=self.object
+                user=self.request.user, service=self.object
             )
             return ReviewRatingForm(self.request.POST, instance=reviews)
         except ReviewRating.DoesNotExist:
@@ -82,20 +82,20 @@ class ReviewRatingFormView(LoginRequiredMixin, SuccessMessageMixin, SingleObject
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse('services:category_detail', kwargs={'slug': self.object.slug})
+        return reverse('services:service_detail', kwargs={'slug': self.object.slug})
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.category = self.object
+        form.instance.service = self.object
         form.instance = form.save()
 
         return super().form_valid(form)
 
 
-class CategorySingleView(View):
+class ServiceSingleView(View):
 
     def get(self, request, *args, **kwargs):
-        view = CategoryDetailView.as_view()
+        view = ServiceDetailView.as_view()
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

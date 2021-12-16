@@ -11,10 +11,7 @@
             <h1 class="display-4 fw-bolder">Company Name</h1>
             <p class="lead fw-normal text-dark-50 mb-0">company slogan</p>
             {% if user.is_superuser %}
-            <div class="btn-group mt-3">
-                <a href="/django-admin" class="btn btn-lg btn-secondary">Django Admin</a>
-                <a href="{% url 'accounts:dashboard_admin' %}" class="btn btn-lg btn-dark">Admin Panel</a>
-            </div>
+            <a href="{% url 'accounts:dashboard_admin' %}" class="btn btn-lg btn-secondary mt-5">Admin Panel</a>
             {% endif %}
         </div>
     </div>
@@ -47,6 +44,7 @@
             </div>
         </div>
         {% include 'includes/product-card.html' %}
+        {% include 'includes/pagination-generic.html' %}
     </div>
 </section>
 

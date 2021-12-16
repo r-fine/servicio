@@ -152,4 +152,5 @@ cython_debug/
 
 # Extras
 draft.py
+To-Do.txt
 # End of https://www.toptal.com/developers/gitignore/api/django

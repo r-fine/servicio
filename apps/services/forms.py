@@ -1,20 +1,20 @@
 from django import forms
 
-from .models import Category, Service, ReviewRating
-
-
-class CategoryCreationForm(forms.ModelForm):
-
-    class Meta:
-        model = Category
-        fields = ['name', 'parent', 'description', 'image']
+from .models import Service, ServiceOption, ReviewRating
 
 
 class ServiceCreationForm(forms.ModelForm):
 
     class Meta:
         model = Service
-        fields = ['category', 'name', 'summary', 'notes', 'image', 'is_active']
+        fields = ['name', 'parent', 'description', 'image']
+
+
+class ServiceOptionCreationForm(forms.ModelForm):
+
+    class Meta:
+        model = ServiceOption
+        fields = ['service', 'name', 'summary', 'notes', 'image', 'is_active']
 
 
 class ReviewRatingForm(forms.ModelForm):
