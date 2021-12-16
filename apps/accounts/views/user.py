@@ -40,9 +40,9 @@ def order_history(request):
 
 def cancel_order(request, op_id):
     op = OrderItem.objects.get(user=request.user, id=op_id)
-    if op.status == 'Accepted':
+    if op.status == 'Preparing':
         messages.error(request, mark_safe(
-            'This order has already been accepted. Please <a href="mailto:info@example.com">contact us<a> to cancel your order.'))
+            'This order is already on progress. Please <a href="mailto:info@example.com">contact us<a> to cancel your order.'))
     else:
         op.status = 'Cancelled'
     op.save()

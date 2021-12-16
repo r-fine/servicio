@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 
-from apps.services.models import Category
+from apps.services.models import Service
 
 
 class LocalUser(AbstractUser):
@@ -18,7 +18,7 @@ class LocalUser(AbstractUser):
 
 class Staff(models.Model):
     department = models.ForeignKey(
-        Category,
+        Service,
         related_name='department',
         on_delete=models.CASCADE,
         null=True,
@@ -27,7 +27,8 @@ class Staff(models.Model):
     user = models.OneToOneField(LocalUser, on_delete=models.CASCADE)
     profile_pic = models.ImageField(
         verbose_name='Profile Picture',
-        upload_to='static/profile_pic/',
+        upload_to="images/",
+        default="images/500_500.png"
     )
     phone = models.CharField(verbose_name='Phone Number', max_length=11)
     address = models.TextField(max_length=255, blank=False)
@@ -36,7 +37,7 @@ class Staff(models.Model):
     )
 
     @property
-    def get_full_name(self):
+    def full_name(self):
         return self.user.first_name + " " + self.user.last_name
 
     def get_user_id(self):
@@ -52,4 +53,4 @@ class Staff(models.Model):
         return reverse('accounts:staff_activate', args=[self.pk])
 
     def __str__(self):
-        return self.get_full_name
+        return f'{self.full_name} ({self.department})'
