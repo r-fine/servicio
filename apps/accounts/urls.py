@@ -6,15 +6,17 @@ from .views.user import (
     cancel_order,
 )
 from .views.admin import (
-    dashboard_admin,
+    AdminDashboard,
     StaffTableView, staff_activate, staff_delete,
-    CategoryTableView, CategoryCreateView, edit_category, delete_category,
     ServiceTableView, ServiceCreateView, edit_service, delete_service,
-    OrderTableView, OrderUpdateForm,
+    ServiceOptionTableView, ServiceOptionCreateView, edit_service_option, delete_service_option,
+    OrderUpdateForm, OrderItemUpdateForm, OrderListView, delete_order,
+    order_accepted, order_completed, order_cancelled, order_preparing
 )
 from .views.staff import (
-    dashboard_staff,
+    staff_dashboard,
     staff_form,
+    AssignedTaskListView,
 )
 app_name = 'accounts'
 
@@ -22,34 +24,24 @@ urlpatterns = [
 
     ######################### FOR USER #########################
     path('user/user-dashboard', user_dashboard, name='user_dashboard'),
-    path('user/user-dashboard', user_dashboard, name='user_dashboard'),
     path('user/order-history', order_history, name='order_history'),
     path(
-        'user/cancel-order/<int:order_id>/', cancel_order, name='cancel_order'
+        'user/cancel-order/<int:op_id>/', cancel_order, name='cancel_order'
     ),
 
     ######################### FOR STAFF #########################
     path('staff/register-staff/', RegisterStaffView.as_view(), name='register_staff'),
-    path('staff/staff-dashboard/',  dashboard_staff, name='dashboard_staff'),
+    path('staff/staff-dashboard/',  staff_dashboard, name='staff_dashboard'),
     path('staff/staff-form/<int:staff_id>/', staff_form, name='staff_form'),
+    path('staff/task-list/', AssignedTaskListView.as_view(), name='task_list'),
 
     ######################### FOR ADMIN #########################
-    path("admin/admin-dashboard/", dashboard_admin, name='dashboard_admin'),
+    path("admin/admin-dashboard/", AdminDashboard.as_view(), name='dashboard_admin'),
     path("admin/staff-list/", StaffTableView.as_view(), name='staff_table'),
     path('admin/staff-delete/<int:staff_id>/',
          staff_delete, name='staff_delete'),
     path(
         'admin/staff-activate/<int:staff_id>/', staff_activate, name='staff_activate'
-    ),
-    path(
-        'admin/category-list/', CategoryTableView.as_view(), name='category_table'
-    ),
-    path('admin/category-add/', CategoryCreateView.as_view(), name='create_category'),
-    path(
-        'admin/category-edit/<int:category_id>/', edit_category, name='edit_category'
-    ),
-    path(
-        'admin/category-delete/<int:category_id>/', delete_category, name='delete_category'
     ),
     path(
         'admin/service-list/', ServiceTableView.as_view(), name='service_table'
@@ -62,8 +54,38 @@ urlpatterns = [
         'admin/service-delete/<int:service_id>/', delete_service, name='delete_service'
     ),
     path(
-        'admin/order-list/', OrderTableView.as_view(), name='order_table'
+        'admin/service-option-list/', ServiceOptionTableView.as_view(), name='service_option_table'
     ),
-    path('admin/order-edit/<int:pk>/',
-         OrderUpdateForm.as_view(), name='edit_order'),
+    path('admin/service-option-add/', ServiceOptionCreateView.as_view(),
+         name='create_service_option'),
+    path(
+        'admin/service-option-edit/<int:service_option_id>/', edit_service_option, name='edit_service_option'
+    ),
+    path(
+        'admin/service-option-delete/<int:service_option_id>/', delete_service_option, name='delete_service_option'
+    ),
+    path(
+        'admin/order-list/', OrderListView.as_view(), name='order_list'
+    ),
+    path(
+        'admin/order-edit/<int:pk>/', OrderUpdateForm.as_view(), name='edit_order'
+    ),
+    path(
+        'admin/order-item-edit/<int:pk>/', OrderItemUpdateForm.as_view(), name='edit_order_item'
+    ),
+    path(
+        'admin/order-delete/<int:order_id>/', delete_order, name='delete_order'
+    ),
+    path(
+        'admin/order-set-accepted/<int:pk>/', order_accepted, name='order_accepted'
+    ),
+    path(
+        'admin/order-set-preparing/<int:pk>/', order_preparing, name='order_preparing'
+    ),
+    path(
+        'admin/order-set-completed/<int:pk>/', order_completed, name='order_completed'
+    ),
+    path(
+        'admin/order-set-cancelled/<int:pk>/', order_cancelled, name='order_cancelled'
+    ),
 ]

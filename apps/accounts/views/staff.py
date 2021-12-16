@@ -2,10 +2,11 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import redirect, render
 # from django.core.exceptions import PermissionDenied
 from django.contrib import messages
-
+from django.views.generic.list import ListView
 from apps.accounts.models import Staff
 from apps.accounts.forms import StaffEditForm
-from apps.accounts.decorators import staff_only
+from apps.accounts.decorators import staff_only, staff_required
+from apps.orders.models import OrderItem
 
 
 @staff_only
@@ -39,33 +40,33 @@ def staff_form(request, staff_id):
 
 
 @staff_only
-def dashboard_staff(request):
+def staff_dashboard(request):
     staff = Staff.objects.get(user=request.user)
+    upcoming = OrderItem.objects.filter(
+        assigned_staff__user=request.user, status='Accepted'
+    ).count()
+    ongoing = OrderItem.objects.filter(
+        assigned_staff__user=request.user, status='Preparing'
+    ).count()
+    completed = OrderItem.objects.filter(
+        assigned_staff__user=request.user, status='Completed'
+    ).count()
+    context = {
+        'upcoming': upcoming,
+        'ongoing': ongoing,
+        'completed': completed,
+    }
     if staff.is_active:
-        return HttpResponse('Staff Dashboard')
+        return render(request, 'account/staff/staff-homepage.html', context)
     else:
         return redirect('accounts:staff_form', staff.id)
 
 
-# def register_staff(request):
-#     userForm = RegisterStaffForm()
-#     staffForm = StaffEditForm()
+@staff_required()
+class AssignedTaskListView(ListView):
+    model = OrderItem
+    template_name = "account/staff/task-list.html"
+    context_object_name = 'tasks'
 
-#     if request.method == 'POST':
-#         userForm = RegisterStaffForm(request.POST)
-#         staffForm = StaffEditForm(request.POST, request.FILES)
-#         if userForm.is_valid() and staffForm.is_valid():
-#             user = userForm.save()
-#             user.set_password(user.password)
-#             user.save()
-#             staff = staffForm.save(commit=False)
-#             staff.user = user
-#             staff.save()
-
-#             return redirect('accounts:dashboard_staff')
-#     else:
-#         userForm = RegisterStaffForm()
-#         staffForm = StaffEditForm()
-#         context = {'userForm': userForm, 'staffForm': staffForm}
-
-#         return render(request, 'account/staff/register-staff.html', context)
+    def get_queryset(self):
+        return OrderItem.objects.filter(assigned_staff__user=self.request.user)
