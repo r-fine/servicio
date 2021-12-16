@@ -55,15 +55,7 @@
         <!-- <section class="py-5"> -->
         <!-- <div class="container my-5"> -->
         <div class="d-flex justify-content-center">
-            {% if messages %}
-            <div class="alert alert-success mt-5" style="width: 50%;">
-                <ul>
-                    {% for message in messages %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
+            {% include 'includes/message-alert.html' %}
         </div>
         {% block staff_dashboard %}
         {% endblock staff_dashboard %}

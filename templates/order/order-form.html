@@ -29,15 +29,7 @@
         <div class="card ms-5 me-5 mt-5 pt-5">
             <div class="card-body">
                 <h2>Order List</h2>
-                {% if messages %}
-                {% for message in messages %}
-                {% if message.tags != 'error' %}
-                <div class="alert alert-{{ message.tags }}">{{ message|safe }}</div>
-                {% else %}
-                <div class="alert alert-danger">{{ message|safe }}</div>
-                {% endif %}
-                {% endfor %}
-                {% endif %}
+                {% include 'includes/message-alert.html' %}
                 <ul>
                     {% for item in order_items %}
                     <li>

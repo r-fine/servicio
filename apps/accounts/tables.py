@@ -33,12 +33,13 @@ class StaffTable(tables.Table):
         )
     )
     full_name = tables.Column(orderable=False)
+    department__name = tables.Column(verbose_name='Department')
 
     class Meta:
         model = Staff
-        template_name = 'django_tables2/bootstrap-responsive.html'
+        template_name = 'django_tables2/bootstrap4.html'
         fields = (
-            'full_name', 'department', 'phone', 'address',
+            'full_name', 'department__name', 'phone', 'address',
             'is_active', 'edit', 'delete',
         )
         attrs = {
@@ -70,7 +71,7 @@ class ServiceTable(tables.Table):
 
     class Meta:
         model = Service
-        template_name = 'django_tables2/bootstrap-responsive.html'
+        template_name = 'django_tables2/bootstrap4.html'
         fields = ('name', 'is_parent', 'edit', 'delete',)
         attrs = {
             'class': 'table table-striped table-hover',
@@ -100,7 +101,7 @@ class ServiceOptionTable(tables.Table):
 
     class Meta:
         model = ServiceOption
-        template_name = 'django_tables2/bootstrap-responsive.html'
+        template_name = 'django_tables2/bootstrap4.html'
         fields = ('service', 'name', 'edit', 'delete',)
         attrs = {
             'class': 'table table-striped table-hover',

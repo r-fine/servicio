@@ -22,7 +22,7 @@ def staff_form(request, staff_id):
             messages.success(request, 'Saved')
             if request.user.is_superuser:
                 return redirect('accounts:staff_table')
-            return redirect('accounts:dashboard_staff')
+            return redirect('accounts:staff_dashboard')
         else:
             return HttpResponse('failed to submit')
     else:

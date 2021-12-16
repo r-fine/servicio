@@ -53,4 +53,4 @@ class Staff(models.Model):
         return reverse('accounts:staff_activate', args=[self.pk])
 
     def __str__(self):
-        return f'{self.full_name} ({self.department})'
+        return f'{self.full_name} ({self.department.name})'

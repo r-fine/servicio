@@ -28,7 +28,12 @@
             <tbody>
                 <tr>
                     <td>{{ o.order_number }}</td>
-                    <td>{{ o.full_name }}</td>
+                    <td>
+                        {{ o.full_name }}
+                        {% if not o.user_verification_status %}
+                        <span class="text-danger">(unverified)</span>
+                        {% endif %}
+                    </td>
                     <td>{{ o.phone }}</td>
                     <td>{{ o.date }}</td>
                     <td>{{ o.time }}</td>
