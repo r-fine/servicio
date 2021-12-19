@@ -77,17 +77,26 @@ WSGI_APPLICATION = 'core.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'd4u7ooip9hgqaa',
+#         'USER': 'tzopvjlqycsvda',
+#         'PASSWORD': 'f454331e7417ceb06a0510533868d0ee32d703a7f1a31a307b35f24eb9de534d',
+#         'HOST': 'ec2-52-19-164-214.eu-west-1.compute.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd4u7ooip9hgqaa',
-        'USER': 'tzopvjlqycsvda',
-        'PASSWORD': 'f454331e7417ceb06a0510533868d0ee32d703a7f1a31a307b35f24eb9de534d',
-        'HOST': 'ec2-52-19-164-214.eu-west-1.compute.amazonaws.com',
+        'NAME': 'cse391Final',
+        'USER': 'postgres',
+        'PASSWORD': 'pgpasswd',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -148,10 +157,10 @@ if DEBUG:
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static")
-# ]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
