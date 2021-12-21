@@ -6,7 +6,7 @@ from apps.services.models import Service
 
 
 class LocalUser(AbstractUser):
-    username = models.CharField(max_length=30, unique=False)
+    username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(verbose_name='E-mail Address', unique=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
