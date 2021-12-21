@@ -56,9 +56,22 @@ class OrderCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        min_date = datetime.date.today() + datetime.timedelta(days=1)
+        min_date = min_date.strftime("%Y-%m-%d")
+        max_date = datetime.date.today() + datetime.timedelta(days=7)
+        max_date = max_date.strftime("%Y-%m-%d")
+
+        order_items = OrderItem.objects.filter(
+            user=self.request.user,
+            is_ordered=False
+        )
         context.update({
-            'order_items': OrderItem.objects.filter(user=self.request.user, is_ordered=False),
-            'item_exists': OrderItem.objects.filter(user=self.request.user, is_ordered=False).exists()
+            'order_items': order_items,
+            'item_exists': order_items.exists(),
+            'num_of_items': order_items.count(),
+            'min_date': min_date,
+            'max_date': max_date,
         })
 
         return context
