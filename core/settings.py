@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'mptt',
     'allauth',
     'allauth.account',
+    'ckeditor',
     'apps.accounts.apps.AccountsConfig',
     'apps.services',
     'apps.orders',
@@ -69,7 +70,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
@@ -97,8 +97,8 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
 # Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -154,7 +154,6 @@ if DEBUG:
     ]
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -163,7 +162,6 @@ STATICFILES_DIRS = [
 ]
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -172,10 +170,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+# crispy forms template pack
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# login urls
 
 LOGIN_URL = "/auth/login"
 LOGIN_REDIRECT_URL = "/"
+
+# authentication settings
 
 AUTH_USER_MODEL = 'accounts.LocalUser'
 
@@ -185,6 +189,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Email setting
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # allauth settings
@@ -206,3 +211,23 @@ ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 
 SITE_ID = 1
+
+# ckeditor settings
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Format'],
+            ['Bold', 'Italic', 'Underline'],
+            [
+                'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-',
+                'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
+            ],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source']
+        ],
+        'height': 300,
+        'width': 500,
+    },
+}

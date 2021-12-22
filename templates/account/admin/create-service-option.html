@@ -9,6 +9,7 @@
             <h1 class="text-center text-primary">{{ form_name }}</h1>
             <form method='POST' enctype='multipart/form-data'>
                 {% csrf_token %}
+                {{ form.media }}
                 {{ form|crispy }}
                 <div class="row justify-content-xs-center mt-3 mx-auto">
                     <button type="submit" class="btn btn-secondary">Save</button>

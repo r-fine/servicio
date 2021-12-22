@@ -1,9 +1,10 @@
 from django.urls import reverse
 from django.db import models
 from django.conf import settings
+from django.contrib.postgres.indexes import GinIndex
 from mptt.models import MPTTModel, TreeForeignKey
 
-from django.contrib.postgres.indexes import GinIndex
+from ckeditor.fields import RichTextField
 
 
 class Service(MPTTModel):
@@ -21,9 +22,10 @@ class Service(MPTTModel):
         blank=True,
         related_name='children'
     )
-    description = models.TextField(
+    description = RichTextField(
         verbose_name='Service Description',
-        blank=True
+        blank=True,
+        null=True,
     )
     image = models.ImageField(
         upload_to="images/",
@@ -89,8 +91,8 @@ class ServiceOption(models.Model):
         blank=True,
     )
     name = models.CharField(verbose_name='Service Option Name', max_length=255)
-    summary = models.TextField(blank=True)
-    notes = models.TextField(blank=True)
+    summary = RichTextField(blank=True, null=True)
+    pricing = RichTextField(blank=True, null=True)
     image = models.ImageField(
         upload_to="images/",
         default="images/500_500.png"
@@ -121,11 +123,23 @@ class ServiceOption(models.Model):
 
 
 class ReviewRating(models.Model):
+    one, two, three, four, five = 1, 2, 3, 4, 5
+    RATINGS = (
+        (one, 1),
+        (two, 2),
+        (three, 3),
+        (four, 4),
+        (five, 5),
+    )
     service = models.ForeignKey(
         Service,
         related_name='review_service',
         on_delete=models.CASCADE,
         null=True
+    )
+    service_option = models.ManyToManyField(
+        ServiceOption,
+        verbose_name='Review for',
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -139,16 +153,19 @@ class ReviewRating(models.Model):
     )
     review = models.TextField(
         verbose_name='Review Details',
-        max_length=500,
+        max_length=255,
         blank=True
     )
-    rating = models.IntegerField()
+    rating = models.IntegerField(choices=RATINGS, default=five)
     status = models.BooleanField(
         verbose_name='Review Visibility',
         default=True
     )
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.subject
