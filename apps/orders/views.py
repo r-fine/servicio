@@ -62,7 +62,7 @@ class OrderCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         max_date = datetime.date.today() + datetime.timedelta(days=7)
         max_date = max_date.strftime("%Y-%m-%d")
 
-        order_items = OrderItem.objects.filter(
+        order_items = OrderItem.objects.select_related('service').filter(
             user=self.request.user,
             is_ordered=False
         )

@@ -28,7 +28,9 @@ class AdminOrderForm(forms.ModelForm):
 
 class AdminOrderItemForm(forms.ModelForm):
     assigned_staff = forms.ModelChoiceField(
-        queryset=Staff.objects.all().filter(is_active=True),
+        queryset=Staff.objects.select_related('user', 'department').all().filter(
+            is_active=True,
+        ),
         required=False
     )
 

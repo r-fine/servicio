@@ -6,6 +6,8 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.text import slugify
+from django.conf import settings
+from django.core.mail import send_mail
 
 from django_tables2 import SingleTableView
 
@@ -47,7 +49,7 @@ class StaffTableView(SingleTableView):
     model = Staff
     table_class = StaffTable
     template_name = "account/admin/staff-list.html"
-    # table_data = Staff.objects.all()
+    table_data = Staff.objects.prefetch_related('user', 'department').all()
     # paginator_class = LazyPaginator
     table_pagination = {
         "per_page": 10
@@ -137,6 +139,7 @@ def delete_service(request, service_id):
 class ServiceOptionTableView(SingleTableView):
     model = ServiceOption
     table_class = ServiceOptionTable
+    table_data = ServiceOption.objects.select_related('service').all()
     template_name = "account/admin/service-option-list.html"
     table_pagination = {
         "per_page": 10
@@ -191,8 +194,10 @@ class OrderListView(ListView):
     model = Order
     template_name = 'account/admin/order-list.html'
     context_object_name = 'orders'
-    queryset = Order.objects.prefetch_related(
-        'order_item').all().order_by('-created_at')
+    queryset = Order.objects.select_related('user').prefetch_related(
+        'user', 'order_item', 'order_item__service', 'order_item__assigned_staff',
+        'order_item__assigned_staff__department', 'order_item__assigned_staff__user',
+    ).all().order_by('-created_at')
     paginate_by = 10
 
 
@@ -259,6 +264,11 @@ def order_completed(request, pk):
     order.status = 'Completed'
     order.is_reviewable = True
     order.save()
+
+    email_to = order.user.email
+    subject = "Order #{0} update".format(order.order.order_number)
+    message = "Your task {0} has been completed".format(order)
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email_to, ])
 
     if request.user.is_superuser:
         return redirect('accounts:order_list')

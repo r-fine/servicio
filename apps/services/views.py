@@ -70,14 +70,16 @@ class ServiceDetailView(DetailView):
         form.fields["service_option"].queryset = ServiceOption.objects.filter(
             service=self.object
         )
-        my_review = ReviewRating.objects.get(
+        my_review = ReviewRating.objects.select_related('user').get(
             user=self.request.user, service=self.object, status=True
-        ) if (self.request.user.is_authenticated and ReviewRating.objects.filter(user=self.request.user, service_id=self.object.id, status=True).exists()) else None
+        ) if (self.request.user.is_authenticated and ReviewRating.objects.filter(
+            user=self.request.user, service_id=self.object.id, status=True
+        ).exists()) else None
 
         context.update({
             'service_options': ServiceOption.objects.select_related('service').filter(service=self.object),
-            'ordered': OrderItem.objects.filter(user=self.request.user, service__in=ServiceOption.objects.filter(service=self.object), is_ordered=True, is_reviewable=True) if self.request.user.is_authenticated else None,
-            'reviews': ReviewRating.objects.select_related('user').filter(service_id=self.object.id, status=True).exclude(user=self.request.user),
+            'ordered': OrderItem.objects.select_related('service').filter(user=self.request.user, service__in=ServiceOption.objects.filter(service=self.object), is_ordered=True, is_reviewable=True) if self.request.user.is_authenticated else None,
+            'reviews': ReviewRating.objects.select_related('user').prefetch_related('service_option').filter(service_id=self.object.id, status=True).exclude(user=self.request.user) if self.request.user.is_authenticated else ReviewRating.objects.select_related('user').prefetch_related('service_option').filter(service_id=self.object.id, status=True),
             'my_review': my_review,
             'form': form,
         })

@@ -40,7 +40,7 @@ class UserUpdateView(SuccessMessageMixin, UpdateView):
 
 @verified_email_required
 def order_history(request):
-    order_list = Order.objects.prefetch_related('order_item').filter(
+    order_list = Order.objects.prefetch_related('order_item__service').filter(
         user=request.user).order_by('-created_at')
 
     page_obj = request.GET.get('page', 1)

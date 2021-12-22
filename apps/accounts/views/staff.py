@@ -42,15 +42,10 @@ def staff_form(request, staff_id):
 @staff_only
 def staff_dashboard(request):
     staff = Staff.objects.get(user=request.user)
-    upcoming = OrderItem.objects.filter(
-        assigned_staff__user=request.user, status='Accepted'
-    ).count()
-    ongoing = OrderItem.objects.filter(
-        assigned_staff__user=request.user, status='Preparing'
-    ).count()
-    completed = OrderItem.objects.filter(
-        assigned_staff__user=request.user, status='Completed'
-    ).count()
+    tasks = OrderItem.objects.filter(assigned_staff__user=request.user)
+    upcoming = tasks.filter(status='Accepted').count()
+    ongoing = tasks.filter(status='Preparing').count()
+    completed = tasks.filter(status='Completed').count()
     context = {
         'upcoming': upcoming,
         'ongoing': ongoing,
@@ -69,4 +64,4 @@ class AssignedTaskListView(ListView):
     context_object_name = 'tasks'
 
     def get_queryset(self):
-        return OrderItem.objects.filter(assigned_staff__user=self.request.user)
+        return OrderItem.objects.select_related('order', 'service').filter(assigned_staff__user=self.request.user)
