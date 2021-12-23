@@ -22,7 +22,7 @@ class LocalUserAdmin(admin.ModelAdmin):
 
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
-    list_display = ['user', 'department', 'phone', 'is_active']
+    list_display = ['user', 'department', 'phone', 'id', 'is_active']
     list_editable = ['is_active']
     list_filter = ['is_active']
     list_per_page = 25

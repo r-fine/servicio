@@ -52,15 +52,17 @@ class Service(MPTTModel):
     def delete_url(self):
         return reverse('accounts:delete_service', args=[self.pk])
 
-    def averageReview(self):
+    @property
+    def average_review(self):
         reviews = ReviewRating.objects.filter(
             service=self, status=True).aggregate(average=models.Avg('rating'))
         avg = 0
         if reviews['average'] is not None:
-            avg = float(reviews['average'])
+            avg = float(round(reviews['average'], 2))
         return avg
 
-    def countReview(self):
+    @property
+    def count_review(self):
         reviews = ReviewRating.objects.filter(
             service=self, status=True).aggregate(count=models.Count('id'))
         count = 0
@@ -69,7 +71,7 @@ class Service(MPTTModel):
         return count
 
     @property
-    def is_parent(self):
+    def is_root(self):
         if self.level == 0:
             return True
         else:
@@ -77,7 +79,8 @@ class Service(MPTTModel):
 
     def __str__(self):
         if self.level == 0:
-            return f'{self.name} (Root)'
+            # return f'{self.name} (Root)'
+            return self.name
         else:
             return f'- {self.name}'
 
@@ -151,10 +154,12 @@ class ReviewRating(models.Model):
         max_length=100,
         blank=True
     )
-    review = models.TextField(
+    review = RichTextField(
+        config_name='minimal',
         verbose_name='Review Details',
-        max_length=255,
-        blank=True
+        max_length=500,
+        blank=True,
+        null=True,
     )
     rating = models.IntegerField(choices=RATINGS, default=five)
     status = models.BooleanField(

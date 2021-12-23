@@ -6,7 +6,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.db.models import Q
 
 from allauth.account.decorators import verified_email_required
 
@@ -115,19 +114,3 @@ def remove_item(request, service_option_id, order_item_id):
     messages.error(request, 'Removed from order')
 
     return redirect('orders:order_create')
-
-
-class OrderDetailView(LoginRequiredMixin, DetailView):
-    model = Order
-    template_name = 'order/order-detail.html'
-    context_object_name = 'order'
-
-    def get_queryset(self):
-        return Order.objects.filter(Q(user=self.request.user) | Q(assigned_staff__user=self.request.user))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'order_items': OrderItem.objects.filter(order=self.object)
-        })
-        return context

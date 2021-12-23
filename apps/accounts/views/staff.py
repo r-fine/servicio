@@ -3,8 +3,9 @@ from django.shortcuts import redirect, render
 # from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.list import ListView
-from apps.accounts.models import Staff
-from apps.accounts.forms import StaffEditForm
+
+from apps.accounts.models import Staff, LocalUser
+from apps.accounts.forms import StaffEditForm, LocalUserForm
 from apps.accounts.decorators import staff_only, staff_required
 from apps.orders.models import OrderItem
 
@@ -12,13 +13,16 @@ from apps.orders.models import OrderItem
 @staff_only
 def staff_form(request, staff_id):
     staff = Staff.objects.get(pk=staff_id)
+    user = LocalUser.objects.get(pk=staff.user_id)
 
     if request.method == 'POST':
         form = StaffEditForm(request.POST, request.FILES, instance=staff)
+        userForm = LocalUserForm(request.POST, instance=user)
         if form.is_valid():
             # staff = form.save(commit=False)
             # staff.is_active = True
             staff.save()
+            user.save()
             messages.success(request, 'Saved')
             if request.user.is_superuser:
                 return redirect('accounts:staff_table')
@@ -27,11 +31,18 @@ def staff_form(request, staff_id):
             return HttpResponse('failed to submit')
     else:
         form = StaffEditForm(instance=staff)
+        userForm = LocalUserForm(instance=user)
         try:
             activated = Staff.objects.get(user=request.user, is_active=True)
         except Staff.DoesNotExist:
             activated = None
-        context = {'form': form, 'activated': activated}
+
+        context = {
+            'form': form,
+            'userForm': userForm,
+            'activated': activated,
+            'staff': staff,
+        }
 
         if request.user.is_superuser or staff.user.id == request.user.id:
             return render(request, 'account/staff/staff-form.html', context)
@@ -47,6 +58,7 @@ def staff_dashboard(request):
     ongoing = tasks.filter(status='Preparing').count()
     completed = tasks.filter(status='Completed').count()
     context = {
+        'staff': staff,
         'upcoming': upcoming,
         'ongoing': ongoing,
         'completed': completed,

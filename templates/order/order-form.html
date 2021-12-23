@@ -58,11 +58,11 @@
                         </div>
 
                         <div class="col-12">
-                            {{ form.address_line_2|as_crispy_field }}
+                            {{ form.address_line_1|as_crispy_field }}
                         </div>
 
                         <div class="col-12">
-                            {{ form.address_line_1|as_crispy_field }}
+                            {{ form.address_line_2|as_crispy_field }}
                         </div>
 
                         <div class="col-md-5">
@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label for="id_time" class="form-label my-0">
+                            <!-- <label for="id_time" class="form-label my-0">
                                 Delivery date
                                 <span class="text-danger"><a class="text-danger" data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
@@ -88,7 +88,8 @@
                             </label>
                             <input type="time" step="3600" min="09:00" max="21:00" name="time" class="form-control"
                                 id="id_time" required>
-                            <small class="text-muted">Office hours are from 9am to 9pm</small>
+                            <small class="text-muted">Office hours are from 9am to 9pm</small> -->
+                            {{ form.time|as_crispy_field }}
                         </div>
                     </div>
 

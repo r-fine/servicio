@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'mptt',
     'allauth',
     'allauth.account',
+    'captcha',
     'ckeditor',
     'apps.accounts.apps.AccountsConfig',
     'apps.services',
@@ -228,6 +229,14 @@ CKEDITOR_CONFIGS = {
             ['RemoveFormat', 'Source']
         ],
         'height': 300,
-        'width': 500,
+        'width': 550,
+    },
+    'minimal': {
+        'toolbar': [
+            ['Bold', 'Italic', 'Underline'],
+            ['Smiley'],
+        ],
+        'height': 140,
+        'width': 465,
     },
 }

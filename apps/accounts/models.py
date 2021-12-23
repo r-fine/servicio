@@ -17,12 +17,12 @@ class LocalUser(AbstractUser):
 
 
 class Staff(models.Model):
+    id = models.AutoField(primary_key=True, serialize=False, verbose_name='ID')
     department = models.ForeignKey(
         Service,
         related_name='department',
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+        null=True
     )
     user = models.OneToOneField(LocalUser, on_delete=models.CASCADE)
     profile_pic = models.ImageField(
@@ -53,4 +53,6 @@ class Staff(models.Model):
         return reverse('accounts:staff_activate', args=[self.pk])
 
     def __str__(self):
+        if self.department == None:
+            return self.full_name
         return f'{self.full_name} ({self.department.name})'

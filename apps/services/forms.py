@@ -1,5 +1,6 @@
 from django import forms
 from django.utils.safestring import mark_safe
+from django.core.exceptions import ValidationError
 
 from .models import Service, ServiceOption, ReviewRating
 
@@ -23,10 +24,8 @@ class ReviewRatingForm(forms.ModelForm):
 
     class Meta:
         model = ReviewRating
-        fields = ['service_option', 'subject', 'review', 'rating']
+        fields = ['service_option', 'subject', 'review', 'rating', ]
         widgets = {
-            # 'service_option': forms.CheckboxSelectMultiple(),
-            'review': forms.Textarea(attrs={'cols': 10, 'rows': 5}),
             'rating': forms.RadioSelect()
         }
 

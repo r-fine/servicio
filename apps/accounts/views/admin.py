@@ -12,7 +12,6 @@ from django.core.mail import send_mail
 from django_tables2 import SingleTableView
 
 from apps.accounts.models import LocalUser, Staff
-# from apps.accounts.tables import StaffTable, ServiceTable, ServiceOptionTable, OrderTable
 from apps.accounts.tables import *
 from apps.accounts.decorators import admin_required, admin_only, staff_only
 from apps.services.forms import ServiceCreationForm, ServiceOptionCreationForm
@@ -206,8 +205,10 @@ class OrderUpdateForm(SuccessMessageMixin, UpdateView):
     model = Order
     form_class = AdminOrderForm
     template_name = "account/admin/order-edit.html"
-    success_url = reverse_lazy('accounts:order_list')
     success_message = 'Order has been updated.'
+
+    def get_success_url(self):
+        return reverse_lazy('accounts:edit_order', args=[self.object.pk])
 
 
 @admin_required()
@@ -215,8 +216,10 @@ class OrderItemUpdateForm(SuccessMessageMixin, UpdateView):
     model = OrderItem
     form_class = AdminOrderItemForm
     template_name = "account/admin/order-item-edit.html"
-    success_url = reverse_lazy('accounts:order_list')
     success_message = 'Order has been updated.'
+
+    def get_success_url(self):
+        return reverse_lazy('accounts:edit_order_item', args=[self.object.pk])
 
     def form_valid(self, form):
         if form.instance.status == 'Completed':
