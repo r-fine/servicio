@@ -11,7 +11,7 @@ from django.core.mail import send_mail
 
 from django_tables2 import SingleTableView
 
-from apps.accounts.models import LocalUser, Staff
+from apps.accounts.models import *
 from apps.accounts.tables import *
 from apps.accounts.decorators import admin_required, admin_only, staff_only
 from apps.services.forms import ServiceCreationForm, ServiceOptionCreationForm
@@ -226,6 +226,22 @@ class OrderItemUpdateForm(SuccessMessageMixin, UpdateView):
             form.instance.is_reviewable = True
         else:
             form.instance.is_reviewable = False
+
+        booked = StaffBookedDateTime(
+            order=form.instance.order,
+            order_item=form.instance,
+            staff=form.instance.assigned_staff,
+            date=form.instance.order.date,
+            time=form.instance.order.time
+        )
+        booked.save(force_insert=True)
+
+        previous_books = StaffBookedDateTime.objects.filter(
+            order=form.instance.order, order_item=form.instance
+        ).exclude(staff=form.instance.assigned_staff)
+
+        for obj in previous_books:
+            obj.delete()
 
         return super().form_valid(form)
 

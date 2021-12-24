@@ -56,3 +56,25 @@ class Staff(models.Model):
         if self.department == None:
             return self.full_name
         return f'{self.full_name} ({self.department.name})'
+
+
+class StaffBookedDateTime(models.Model):
+    HOURS = (
+        ('9:00 a.m.', '9:00 a.m.'), ('10:00 a.m.',
+                                     '10:00 a.m.'), ('11:00 a.m.', '11:00 a.m.'),
+        ('12:00 p.m.', '12:00 p.m.'), ('1:00 p.m.',
+                                       '1:00 p.m.'), ('2:00 p.m.', '2:00 p.m.'),
+        ('3:00 p.m.', '3:00 p.m.'), ('4:00 p.m.',
+                                     '4:00 p.m.'), ('5:00 p.m.', '5:00 p.m.'),
+        ('6:00 p.m.', '6:00 p.m.'), ('7:00 p.m.',
+                                     '7:00 p.m.'), ('8:00 p.m.', '8:00 p.m.'),
+    )
+    order = models.ForeignKey(
+        'orders.Order', on_delete=models.CASCADE, null=True
+    )
+    order_item = models.ForeignKey(
+        'orders.OrderItem', on_delete=models.CASCADE, null=True
+    )
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
+    date = models.DateField(auto_now=False, auto_now_add=False)
+    time = models.CharField(max_length=10, choices=HOURS, blank=True)

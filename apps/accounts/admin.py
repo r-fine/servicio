@@ -26,3 +26,8 @@ class StaffAdmin(admin.ModelAdmin):
     list_editable = ['is_active']
     list_filter = ['is_active']
     list_per_page = 25
+
+
+@admin.register(StaffBookedDateTime)
+class StaffBookedDateTimeAdmin(admin.ModelAdmin):
+    list_display = ['staff', 'order', 'order_item', 'date', 'time', 'id']
