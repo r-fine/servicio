@@ -32,6 +32,9 @@ class Staff(models.Model):
     )
     phone = models.CharField(verbose_name='Phone Number', max_length=11)
     address = models.TextField(max_length=255, blank=False)
+    booked_on = models.ManyToManyField(
+        "StaffBookedDateTime", related_name='booked_on'
+    )
     is_active = models.BooleanField(
         verbose_name='Active status', default=False
     )
@@ -51,6 +54,9 @@ class Staff(models.Model):
 
     def activation_url(self):
         return reverse('accounts:staff_activate', args=[self.pk])
+
+    def schedule_table_url(self):
+        return reverse('accounts:staff_schedule_single', args=[self.pk])
 
     def __str__(self):
         if self.department == None:
@@ -78,3 +84,6 @@ class StaffBookedDateTime(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
     date = models.DateField(auto_now=False, auto_now_add=False)
     time = models.CharField(max_length=10, choices=HOURS, blank=True)
+
+    class Meta:
+        ordering = ['date']

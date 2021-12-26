@@ -17,6 +17,9 @@ class StaffTable(tables.Table):
     deletable = {
         'td': {'data-href': lambda record: record.delete_url}
     }
+    schedule = {
+        'td': {'data-href': lambda record: record.schedule_table_url}
+    }
     is_active = tables.Column(
         attrs=activate,
     )
@@ -34,6 +37,9 @@ class StaffTable(tables.Table):
     )
     full_name = tables.Column(orderable=False)
     department__name = tables.Column(verbose_name='Department')
+    schedule = tables.Column(
+        attrs=schedule, default='show'
+    )
 
     class Meta:
         model = Staff

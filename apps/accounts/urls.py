@@ -9,11 +9,12 @@ from .views.user import (
 )
 from .views.admin import (
     AdminDashboard,
-    StaffTableView, staff_activate, staff_delete,
+    StaffTableView, staff_activate, staff_delete, staff_schedule, staff_schedule_list,
     ServiceTableView, ServiceCreateView, edit_service, delete_service,
     ServiceOptionTableView, ServiceOptionCreateView, edit_service_option, delete_service_option,
     OrderUpdateForm, OrderItemUpdateForm, OrderListView, delete_order,
-    order_accepted, order_completed, order_cancelled, order_preparing
+    order_accepted, order_completed, order_cancelled, order_preparing,
+    # OrderUpdateFormSetView,
 )
 from .views.staff import (
     staff_dashboard,
@@ -45,10 +46,17 @@ urlpatterns = [
     ######################### FOR ADMIN #########################
     path("admin/admin-dashboard/", AdminDashboard.as_view(), name='admin_dashboard'),
     path("admin/staff-list/", StaffTableView.as_view(), name='staff_table'),
-    path('admin/staff-delete/<int:staff_id>/',
-         staff_delete, name='staff_delete'),
+    path(
+        'admin/staff-delete/<int:staff_id>/', staff_delete, name='staff_delete'
+    ),
     path(
         'admin/staff-activate/<int:staff_id>/', staff_activate, name='staff_activate'
+    ),
+    path(
+        'admin/staff-schedule/<int:staff_id>/', staff_schedule, name='staff_schedule_single'
+    ),
+    path(
+        'admin/staff-schedule/all/', staff_schedule_list, name='staff_schedule_list'
     ),
     path(
         'admin/service/list/', ServiceTableView.as_view(), name='service_table'
@@ -63,8 +71,9 @@ urlpatterns = [
     path(
         'admin/service-option/list/', ServiceOptionTableView.as_view(), name='service_option_table'
     ),
-    path('admin/service-option/add/', ServiceOptionCreateView.as_view(),
-         name='create_service_option'),
+    path(
+        'admin/service-option/add/', ServiceOptionCreateView.as_view(), name='create_service_option'
+    ),
     path(
         'admin/service-option/edit/<int:service_option_id>/', edit_service_option, name='edit_service_option'
     ),
@@ -77,6 +86,9 @@ urlpatterns = [
     path(
         'admin/order/edit/<int:pk>/', OrderUpdateForm.as_view(), name='edit_order'
     ),
+    # path(
+    #     'admin/order/<int:pk>/items/edit/', OrderUpdateFormSetView.as_view(), name='edit_order_formset'
+    # ),
     path(
         'admin/order-item/edit/<int:pk>/', OrderItemUpdateForm.as_view(), name='edit_order_item'
     ),

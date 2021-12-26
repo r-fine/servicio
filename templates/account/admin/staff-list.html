@@ -6,7 +6,12 @@
     <div class="container px-4 px-lg-5 mt-5">
         <h2 class="text-danger text-center fw-bolder mb-3">Staff List</h2>
         <input class="form-control" id="myInput" type="text" placeholder="Search...">
-        <div class="container my-5">
+        <div>
+            <a href="{% url 'accounts:staff_schedule_list' %}" type="button" class="btn btn-primary mt-3">
+                All Staff's Schedule Table
+            </a>
+        </div>
+        <div class="container my-3">
             {% render_table table %}
         </div>
     </div>
@@ -25,7 +30,7 @@
                     window.location = $(this).data("href");
                 }
             });
-        $("td[data-href*='/staff-activate/']").click(
+        $("td[data-href*='/staff-activate/'], td[data-href*='/staff-schedule/']").click(
             function () {
                 window.location = $(this).data("href");
             }).css({
