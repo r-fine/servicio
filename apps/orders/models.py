@@ -100,7 +100,8 @@ class OrderItem(models.Model):
     )
     service = models.ForeignKey(
         ServiceOption,
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE
+    )
     is_ordered = models.BooleanField(default=False)
     status = models.CharField(max_length=10, choices=STATUS, default='Pending')
     assigned_staff = models.ForeignKey(

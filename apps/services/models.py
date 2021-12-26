@@ -79,8 +79,7 @@ class Service(MPTTModel):
 
     def __str__(self):
         if self.level == 0:
-            # return f'{self.name} (Root)'
-            return self.name
+            return f'{self.name} (Root)'
         else:
             return f'- {self.name}'
 

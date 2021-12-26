@@ -36,3 +36,11 @@ class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['q'].label = 'Search For'
+
+
+class ContactusForm(forms.Form):
+    Name = forms.CharField(max_length=30)
+    Email = forms.EmailField()
+    Message = forms.CharField(
+        max_length=500, widget=forms.Textarea()
+    )

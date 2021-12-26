@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'widget_tweaks',
     'django_tables2',
+    'django_filters',
     'mptt',
     'allauth',
     'allauth.account',
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'apps.accounts.apps.AccountsConfig',
     'apps.services',
     'apps.orders',
+    'tawkto',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +64,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'apps.services.context_processors.services',
+                'apps.orders.context_processors.order_item_counter',
             ],
         },
     },
@@ -240,3 +243,5 @@ CKEDITOR_CONFIGS = {
         'width': 465,
     },
 }
+
+TAWKTO_ID_SITE = '127.0.0.1'

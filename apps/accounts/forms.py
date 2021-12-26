@@ -42,9 +42,9 @@ class RegisterStaffForm(UserCreationForm):
 
 class StaffEditForm(forms.ModelForm):
     # is_active = forms.BooleanField(widget=forms.NullBooleanSelect())
-    department = forms.ModelChoiceField(
-        queryset=Service.objects.filter(level=0)
-    )
+    # department = forms.ModelChoiceField(
+    #     queryset=Service.objects.filter(level=0)
+    # )
 
     class Meta:
         model = Staff

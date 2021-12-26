@@ -2,17 +2,14 @@
 {% load static %}
 {% block title %}Order List{% endblock%}
 {% block head %}
-<style>
-    .hiddenRow {
-        padding: 0 !important;
-    }
-</style>
 {% endblock head %}
 {% block admin_dashboard %}
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
         <div class="fw-bolder fs-3 text-danger text-center">Order List</div>
+        <input class="form-control mb-5" id="myInput" type="text" placeholder="Search...">
         <table id="myTable" class="table table-hover" style="border-collapse:collapse;">
+            {% for o in orders %}
             <thead>
                 <tr class="text-center">
                     <th scope="col">Order number</th>
@@ -25,7 +22,6 @@
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
-            {% for o in orders %}
             <tbody>
                 <tr>
                     <td>{{ o.order_number }}</td>
@@ -55,10 +51,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="6" class="hiddenRow">
-                        <div id="accordion{{o.id}}" class="accordian-body collapse my-2">
-                            <div class="d-flex mb-2 text-primary fw-bold justify-content-around">
-                                <div>Order details:</div>
+                    <td colspan="6" class="p-0">
+                        <div id="accordion{{o.id}}" class="accordian-body collapse my-2 show">
+                            <div class="d-flex mb-2 text-secondary fw-bold justify-content-around">
+                                <div>Service</div>
+                                <div>delete/edit</div>
                                 <div>Change status</div>
                             </div>
                             {% for item in o.order_item.all %}
@@ -68,11 +65,11 @@
                                 </div>
                                 <div>{{ item }}</div>
                                 <div
-                                    class="badge rounded-pill bg-{% if item.status == 'Pending' %}secondary{%elif item.status == 'Accepted'%}primary{%elif item.status == 'Preparing'%}info{%elif item.status == 'Completed'%}success{%elif item.status == 'Cancelled'%}danger{%endif%} ms-auto me-3">
+                                    class="badge rounded-pill bg-{% if item.status == 'Pending' %}secondary{%elif item.status == 'Accepted'%}primary{%elif item.status == 'Preparing'%}info{%elif item.status == 'Completed'%}success{%elif item.status == 'Cancelled'%}danger{%endif%} ms-auto">
                                     {{ item.status }}
                                 </div>
                                 {% if item.status == 'Pending' or item.status == 'Accepted' or item.status == 'Preparing' %}
-                                <div>
+                                <div class="ms-5 ps-5">
                                     <a href="{% url 'accounts:cancel_order' item.id %}" type="button"
                                         class="text-danger"
                                         onclick="return confirm('Are you sure you want to cancel this order?')">
@@ -102,13 +99,13 @@
 
                         </div>
                     </td>
-                    <td colspan="6" class="hiddenRow">
-                        <div id="accordion{{o.id}}" class="accordian-body collapse my-2">
+                    <td colspan="6" class="p-0">
+                        <div id="accordion{{o.id}}" class="accordian-body collapse my-2 show">
                             <div class="d-flex text-primary fw-bold justify-content-around mb-2">Assigned staff</div>
                             {% for item in o.order_item.all %}
                             <div class="d-flex justify-content-around align-items-center">
                                 <div class="my-3">
-                                    {{ item.assigned_staff }}
+                                    {{ item.assigned_staff.full_name }} ({{item.assigned_staff.id}})
                                     <div class="my-2"></div>
                                 </div>
                             </div>
@@ -122,4 +119,13 @@
         {% include 'includes/pagination-generic.html' %}
     </div>
 </section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+</script>
 {% endblock admin_dashboard %}

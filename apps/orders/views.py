@@ -1,3 +1,4 @@
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
@@ -98,7 +99,8 @@ def add_item(request, service_option_id):
         order_item.save()
         messages.success(request, 'Added to order list.')
 
-    return redirect('orders:order_create')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    # return redirect('orders:create_order')
 
 
 @login_required
@@ -113,4 +115,5 @@ def remove_item(request, service_option_id, order_item_id):
     order_item.delete()
     messages.error(request, 'Removed from order')
 
-    return redirect('orders:order_create')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    # return redirect('orders:create_order')

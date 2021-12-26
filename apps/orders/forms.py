@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+# from django.forms.models import inlineformset_factory
 
 from .models import Order, OrderItem
 from apps.accounts.models import Staff, StaffBookedDateTime
@@ -24,6 +25,10 @@ class AdminOrderForm(forms.ModelForm):
             'address_line_1', 'address_line_2', 'area', 'order_note', 'date', 'time',
             'is_ordered',
         ]
+
+
+# OrderUpdateFormSet = inlineformset_factory(Order, OrderItem, fields=(
+#     'user', 'service', 'assigned_staff', 'status', 'is_reviewable'), extra=0, can_delete=True)
 
 
 class AdminOrderItemForm(forms.ModelForm):

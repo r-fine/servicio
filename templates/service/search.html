@@ -1,13 +1,15 @@
-{% extends "../base.html" %}
+{% extends "service/home.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block title %}Search Results{% endblock%}
 {% block content %}
-<section class="py-5">
+
+<section class="">
+    {% include 'includes/header.html' %}
     <div class="container px-4 px-lg-5 mt-5">
         {% if q %}
-        <h1>Results containing "{{ q }}"</h1>
-        <p>
+        <h1>Results containing <span class="text-primary">"{{ q }}"</span></h1>
+        <p class="text-primary">
             {% with results.count as total_results %}
             Found {{ total_results }} result{{ total_results|pluralize }}
             {% endwith %}
@@ -36,9 +38,12 @@
                                 Pricing: <br>
                                 <span class="text-muted">{{ s.pricing|safe }}</span>
                             </p>
-                            <a href="{% url 'orders:add_item' s.id %}" class="btn btn-outline-secondary mb-1">Book</a>
-                            <a href="{{ s.service.get_absolute_url }}" class="btn btn-outline-secondary">See all related
-                                servicecs</a>
+                            <div class="btn-group">
+                                <a href="{% url 'orders:add_item' s.id %}" class="btn btn-primary">Book</a>
+                                <a href="{{ s.service.get_absolute_url }}" class="btn btn-outline-secondary">See all
+                                    related
+                                    servicecs</a>
+                            </div>
                         </div>
                     </div>
                 </div>

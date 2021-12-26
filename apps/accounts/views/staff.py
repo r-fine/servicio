@@ -23,7 +23,7 @@ def staff_form(request, staff_id):
             # staff.is_active = True
             staff.save()
             user.save()
-            messages.success(request, 'Saved')
+            messages.success(request, 'Profile Updated')
             if request.user.is_superuser:
                 return redirect('accounts:staff_table')
             return redirect('accounts:staff_dashboard')

@@ -23,6 +23,7 @@ class LocalUserAdmin(admin.ModelAdmin):
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
     list_display = ['user', 'department', 'phone', 'id', 'is_active']
+    exclude = ['booked_on']
     list_editable = ['is_active']
     list_filter = ['is_active']
     list_per_page = 25
