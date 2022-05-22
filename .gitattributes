@@ -1,3 +1,2 @@
-# *.js linguist-detectable=false
-# *.css linguist-detectable=false
-*.html linguist-detectable=false
+# to change language of repo from HTML to Python
+*.html linguist-language=Python
