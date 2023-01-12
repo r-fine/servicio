@@ -8,12 +8,12 @@ git clone https://github.com/r-fine/servicio.git
 #### 4. Open terminal
 #### 4. Make a virtual environment
 ```
-python -m venv venv
+python3 -m venv venv
 ```
 #### 5. Activate virtual environment
 For Linux and macOS:
 ```
-source /venv/bin/activate
+source ./venv/bin/activate
 ```
 For Windows:
 ```
