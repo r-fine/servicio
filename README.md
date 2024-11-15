@@ -1,5 +1,5 @@
 ## How to install:
-#### 1. Install [Python3](https://www.python.org/downloads/) on your computer
+#### 1. Install [Python3.9](https://www.python.org/downloads/release/python-3913/) on your computer
 #### 2. [Download](https://github.com/r-fine/tasker.git) or clone the repository 
 ```
 git clone https://github.com/r-fine/servicio.git
